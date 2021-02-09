@@ -10,3 +10,6 @@
 - Running a container with a volume: ~docker run -d -p 8080:8080 -v "$PWD/<something>":/<something> <tag_name>:<version>~
   + ~"$PWD/<something>"~ = source ~<something>~ at the current folder ~($PWD)~
   + ~/<something>~ = which folder do you want to mirror the local one to, in the container?
+- All docker containers *currently running*: ~docker ps~
+- **Stop** a container: ~docker kill <container_id>~
+  - ~<container_id>~ = you can find it from using ~docker ps~
