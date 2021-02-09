@@ -1,0 +1,12 @@
+# enterprise_integration_systems
+
+** Useful docker commands:
+**** Running a container: docker run -d -p 8080:8080 <some_container_name>
+***** -d = runs on the background/does not take over your terminal session
+***** -p = port forwarding
+**** Building a container: docker build -t <tag_name>:<version> .
+***** -t = tag it/give it a name
+***** . = where is the docker file at? . means it'll use the local folder
+**** Running a container with a volume: docker run -d -p 8080:8080 -v "$PWD/<something>":/<something> <tag_name>:<version>
+***** "$PWD/<something>" = source <something> at the current folder($PWD)
+***** /<something> = which folder do you want to mirror the local one to, in the container?

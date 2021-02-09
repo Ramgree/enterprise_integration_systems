@@ -1,1 +1,0 @@
-# enterprise_integration_systems
