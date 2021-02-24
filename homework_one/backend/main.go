@@ -45,6 +45,12 @@ func GetTodo(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func GetAllTodo(w http.ResponseWriter, r *http.Request) {
+	log.Println("getting all todos")
+	w.Write(globalState.ReadAllTodos())
+
+}
+
 func PostUpdateTodo(w http.ResponseWriter, r *http.Request) {
 	log.Println("updating an existing todo")
 
@@ -71,9 +77,12 @@ func DeleteTodo(w http.ResponseWriter, r *http.Request) {
 func main() {
 	router := mux.NewRouter()
 
+	log.Println("Server started")
+
 	router.HandleFunc("/todo", PostCreateTodo).Methods(http.MethodPost)
-	router.HandleFunc("/todo/{id}", PostUpdateTodo).Methods(http.MethodPost)
+	router.HandleFunc("/todo", GetAllTodo).Methods(http.MethodGet)
 	router.HandleFunc("/todo/{id}", GetTodo).Methods(http.MethodGet)
+	router.HandleFunc("/todo/{id}", PostUpdateTodo).Methods(http.MethodPost)
 	router.HandleFunc("/todo/{id}", DeleteTodo).Methods(http.MethodDelete)
 
 	log.Fatal(http.ListenAndServe(":8000", router))

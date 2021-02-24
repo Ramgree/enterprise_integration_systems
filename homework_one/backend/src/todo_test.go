@@ -61,6 +61,30 @@ func TestCreateReadTodo(t *testing.T) {
 
 }
 
+func TestReadAll(t *testing.T) {
+
+	address := "http://localhost:8000/todo"
+
+	state := make([]*Todo, 0)
+
+	resp, err := http.Get(address)
+
+	if err != nil {
+		t.Error("Problem with the endpoint // readAll", err)
+	}
+
+	defer resp.Body.Close()
+
+	err = json.NewDecoder(resp.Body).Decode(&state)
+
+	if len(state) != 3 {
+
+		t.Error("Get all didn't work, oh shizzle", state)
+
+	}
+
+}
+
 func TestUpdate(t *testing.T) {
 
 	// Updating
