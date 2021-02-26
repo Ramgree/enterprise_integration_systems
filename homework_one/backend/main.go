@@ -20,6 +20,16 @@ var todos = []*src.Todo{
 		Title:  "bar",
 		Status: "Finished",
 	},
+	{
+		Id: "3",
+		Title: "meh",
+		Status: "Undone",
+	},
+	{
+		Id: "4",
+		Title: "estonian_u_ff",
+		Status: "Unfinalized",
+	},
 }
 
 var dependencyDAG, globalState = src.NewTodoListAndDag(todos)
@@ -31,6 +41,22 @@ func PostCreateTodo(w http.ResponseWriter, r *http.Request) {
 	todo := src.Todo{}
 	json.Unmarshal(reqBody, &todo)
 	globalState.CreateTodo(&todo)
+
+	log.Println("Let's see 2", todo)
+
+	log.Println(globalState.Todos)
+
+	for _, address := range globalState.Todos {
+
+		log.Println(*address)
+
+	}
+
+	if len(dependencyDAG.AdjacencyList[todo.Id]) == 0 {
+
+		dependencyDAG.AdjacencyList[todo.Id] = make(map[string]bool)
+
+	}
 
 	json.NewEncoder(w).Encode(todo)
 
@@ -66,12 +92,14 @@ func GetTodo(w http.ResponseWriter, r *http.Request) {
 func GetAllTodo(w http.ResponseWriter, r *http.Request) {
 	log.Println("getting all todos")
 	w.Write(globalState.ReadAllTodos())
+	log.Println(globalState.Todos)
 
 }
 
 func GetAllEdges(w http.ResponseWriter, r *http.Request) {
 	log.Println("getting all edges")
 	log.Println(dependencyDAG.Edges)
+	log.Println(dependencyDAG.AdjacencyList)
 
 	for _, address := range dependencyDAG.Edges {
 

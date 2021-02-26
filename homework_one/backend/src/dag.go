@@ -13,13 +13,17 @@ type Edge struct {
 type DAG struct {
 	nodes *TodoList
 	Edges []*Edge
-	adjacencyList map[string][]string
+	AdjacencyList map[string]map[string]bool
 }
 
 func (d *DAG) AddEdge(edge *Edge) {
 
-	d.Edges = append(d.Edges, edge)
+	if (d.AdjacencyList[edge.From])[edge.To] != true {
 
+		d.Edges = append(d.Edges, edge)
+		(d.AdjacencyList[edge.From])[edge.To] = true
+
+	}
 }
 
 func (d *DAG) GetEdges() []byte {

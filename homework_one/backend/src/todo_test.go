@@ -3,6 +3,7 @@ package src
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"testing"
 )
@@ -59,6 +60,8 @@ func TestCreateReadTodo(t *testing.T) {
 
 	}
 
+	fmt.Println(resp_struct)
+
 }
 
 func TestReadAll(t *testing.T) {
@@ -77,7 +80,7 @@ func TestReadAll(t *testing.T) {
 
 	err = json.NewDecoder(resp.Body).Decode(&state)
 
-	if len(state) != 3 {
+	if len(state) != 5 {
 
 		t.Error("Get all didn't work, oh shizzle", state)
 

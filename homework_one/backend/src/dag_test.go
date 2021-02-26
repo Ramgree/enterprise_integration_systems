@@ -27,7 +27,9 @@ func TestAddNewEdge(t *testing.T) {
 
 	address := "http://localhost:8000/todo/1/2"
 
-	_, err := http.Post(address, "application/json", nil)
+	resp, err := http.Post(address, "application/json", nil)
+
+	defer resp.Body.Close()
 
 	if err != nil {
 
@@ -35,8 +37,22 @@ func TestAddNewEdge(t *testing.T) {
 
 	}
 
-}
+	//time.Sleep(time.Second * 1)
 
+	// Adding another one
+	address = "http://localhost:8000/todo/4/3"
+
+	resp, _ = http.Post(address, "application/json", nil)
+
+	//defer resp.Body.Close()
+
+//	if err != nil {
+
+//		t.Error("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa", err)
+
+//	}
+
+}
 func TestReadAllEdges(t *testing.T) {
 
 	var resp_struct []*Edge
@@ -50,6 +66,8 @@ func TestReadAllEdges(t *testing.T) {
 		t.Error("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
 	}
+
+	defer resp.Body.Close()
 
 	err = json.NewDecoder(resp.Body).Decode(&resp_struct)
 
