@@ -10,9 +10,11 @@ type TodoList struct {
 	todos map[string]*Todo
 }
 
-func NewTodoList(todos []*Todo) *TodoList {
+func NewTodoListAndDag(todos []*Todo) (*DAG, *TodoList) {
 
 	var NewTodoList TodoList
+
+	var NewDAG DAG
 
 	NewTodoList.todos = make(map[string]*Todo)
 
@@ -22,7 +24,9 @@ func NewTodoList(todos []*Todo) *TodoList {
 
 	}
 
-	return &NewTodoList
+	NewDAG.nodes = &NewTodoList
+
+	return &NewDAG, &NewTodoList
 
 }
 

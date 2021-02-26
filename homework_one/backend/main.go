@@ -22,7 +22,7 @@ var todos = []*src.Todo{
 	},
 }
 
-var globalState = src.NewTodoList(todos)
+var dependencyDAG, globalState = src.NewTodoListAndDag(todos)
 
 func PostCreateTodo(w http.ResponseWriter, r *http.Request) {
 	log.Println("creating new todo")
@@ -33,6 +33,24 @@ func PostCreateTodo(w http.ResponseWriter, r *http.Request) {
 	globalState.CreateTodo(&todo)
 
 	json.NewEncoder(w).Encode(todo)
+
+}
+
+func PostCreateEdge(w http.ResponseWriter, r *http.Request) {
+	log.Println("adding new edge")
+
+	vars := mux.Vars(r)
+	from := vars["from"]
+	to := vars["to"]
+
+	log.Println("checking the request body for adding new edge: ", from, to)
+	edge := src.Edge{}
+	edge.From = from
+	edge.To = to
+
+	dependencyDAG.AddEdge(&edge)
+
+	json.NewEncoder(w).Encode(edge)
 
 }
 
@@ -49,6 +67,18 @@ func GetAllTodo(w http.ResponseWriter, r *http.Request) {
 	log.Println("getting all todos")
 	w.Write(globalState.ReadAllTodos())
 
+}
+
+func GetAllEdges(w http.ResponseWriter, r *http.Request) {
+	log.Println("getting all edges")
+	log.Println(dependencyDAG.Edges)
+
+	for _, address := range dependencyDAG.Edges {
+
+		log.Println(*address)
+
+	}
+	w.Write(dependencyDAG.GetEdges())
 }
 
 func PostUpdateTodo(w http.ResponseWriter, r *http.Request) {
@@ -79,11 +109,16 @@ func main() {
 
 	log.Println("Server started")
 
+	// Nodes
 	router.HandleFunc("/todo", PostCreateTodo).Methods(http.MethodPost)
 	router.HandleFunc("/todo", GetAllTodo).Methods(http.MethodGet)
 	router.HandleFunc("/todo/{id}", GetTodo).Methods(http.MethodGet)
 	router.HandleFunc("/todo/{id}", PostUpdateTodo).Methods(http.MethodPost)
 	router.HandleFunc("/todo/{id}", DeleteTodo).Methods(http.MethodDelete)
+
+	// Edges
+	router.HandleFunc("/todo/{from}/{to}", PostCreateEdge).Methods(http.MethodPost)
+	router.HandleFunc("/edges", GetAllEdges).Methods(http.MethodGet)
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 
