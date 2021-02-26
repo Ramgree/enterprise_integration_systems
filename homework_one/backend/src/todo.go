@@ -6,15 +6,23 @@ import (
 )
 
 type TodoList struct {
-	todos []*Todo
+
+	todos map[string]*Todo
 }
 
 func NewTodoList(todos []*Todo) *TodoList {
 
-	return &TodoList{
+	var NewTodoList TodoList
 
-		todos: todos,
+	NewTodoList.todos = make(map[string]*Todo)
+
+	for _, td := range todos {
+
+		NewTodoList.todos[td.Id] = td
+
 	}
+
+	return &NewTodoList
 
 }
 
@@ -31,26 +39,22 @@ type StatusChange struct {
 
 func (t *TodoList) CreateTodo(todo *Todo) {
 
-	t.todos = append(t.todos, todo)
+	t.todos[todo.Id] = todo
 
 }
 
 func (t *TodoList) ReadTodo(id string) []byte {
 	buf := &bytes.Buffer{}
-	for _, todo := range t.todos {
 
-		if todo.Id == id {
+	json.NewEncoder(buf).Encode(t.todos[id])
 
-			json.NewEncoder(buf).Encode(todo)
-
-		}
-	}
 	return buf.Bytes()
 }
 
 func (t *TodoList) ReadAllTodos() []byte {
 
 	buf := &bytes.Buffer{}
+
 	json.NewEncoder(buf).Encode(t.todos)
 
 	return buf.Bytes()
@@ -59,28 +63,12 @@ func (t *TodoList) ReadAllTodos() []byte {
 
 func (t *TodoList) UpdateTodo(newStatus *StatusChange) {
 
-	for _, todo := range t.todos {
-
-		if todo.Id == newStatus.Id {
-
-			todo.Status = newStatus.Status
-
-		}
-
-	}
+	t.todos[newStatus.Id].Status = newStatus.Status
 
 }
 
 func (t *TodoList) DeleteTodo(id string) {
 
-	for index, todo := range t.todos {
-
-		if todo.Id == id {
-
-			t.todos = append(t.todos[:index], t.todos[index+1:]...)
-
-		}
-
-	}
+	delete(t.todos, id)
 
 }

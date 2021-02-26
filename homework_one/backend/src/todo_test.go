@@ -65,7 +65,7 @@ func TestReadAll(t *testing.T) {
 
 	address := "http://localhost:8000/todo"
 
-	state := make([]*Todo, 0)
+	state := make(map[string][]*Todo)
 
 	resp, err := http.Get(address)
 
