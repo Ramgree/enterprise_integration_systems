@@ -6,11 +6,10 @@ import (
 )
 
 type TodoList struct {
-
 	Todos map[string]*Todo
 }
 
-func NewTodoListAndDag(todos []*Todo) (*DAG, *TodoList) {
+func NewTodoListAndDag(todos []*Todo, edges []*Edge) (*DAG, *TodoList) {
 
 	var NewTodoList TodoList
 
@@ -31,6 +30,15 @@ func NewTodoListAndDag(todos []*Todo) (*DAG, *TodoList) {
 
 		NewDAG.AdjacencyList[td.Id] = make(map[string]bool)
 
+	}
+
+	for _, edge := range edges {
+
+		if (NewDAG.AdjacencyList[edge.From])[edge.To] != true {
+
+			NewDAG.Edges = append(NewDAG.Edges, edge)
+			(NewDAG.AdjacencyList[edge.From])[edge.To] = true
+		}
 	}
 
 	return &NewDAG, &NewTodoList

@@ -12,27 +12,52 @@ import (
 var todos = []*src.Todo{
 	{
 		Id:     "0",
-		Title:  "foo",
+		Title:  "Turn cluster on",
 		Status: "Unfinished",
 	},
 	{
 		Id:     "1",
-		Title:  "bar",
+		Title:  "Process data",
 		Status: "Finished",
 	},
 	{
-		Id: "3",
-		Title: "meh",
-		Status: "Undone",
+		Id:     "3",
+		Title:  "Turn another cluster on",
+		Status: "Finished",
 	},
 	{
-		Id: "4",
-		Title: "estonian_u_ff",
-		Status: "Unfinalized",
+		Id:     "4",
+		Title:  "Pay the server bills",
+		Status: "Finished",
+	},
+	{
+		Id:     "6",
+		Title:  "Process more data",
+		Status: "Unfinished",
+	},
+	{
+		Id:     "7",
+		Title:  "Shut down cluster",
+		Status: "Unfinished",
 	},
 }
 
-var dependencyDAG, globalState = src.NewTodoListAndDag(todos)
+var edges = []*src.Edge{
+	{
+		From: "4",
+		To:   "3",
+	},
+	{
+		From: "3",
+		To:   "6",
+	},
+	{
+		From: "6",
+		To:   "7",
+	},
+}
+
+var dependencyDAG, globalState = src.NewTodoListAndDag(todos, edges)
 
 func PostCreateTodo(w http.ResponseWriter, r *http.Request) {
 	log.Println("creating new todo")
@@ -109,6 +134,19 @@ func GetAllEdges(w http.ResponseWriter, r *http.Request) {
 	w.Write(dependencyDAG.GetEdges())
 }
 
+func GetDownstream(w http.ResponseWriter, r *http.Request) {
+	log.Println("fetching all dependencies")
+	vars := mux.Vars(r)
+	key := vars["id"]
+
+	//testib := dependencyDAG.DepthFirstSearch(key)
+
+	//log.Println("Everything downstream of ", key, " : ", testib)
+
+	w.Write(dependencyDAG.DepthFirstSearch(key))
+
+}
+
 func PostUpdateTodo(w http.ResponseWriter, r *http.Request) {
 	log.Println("updating an existing todo")
 
@@ -147,6 +185,7 @@ func main() {
 	// Edges
 	router.HandleFunc("/todo/{from}/{to}", PostCreateEdge).Methods(http.MethodPost)
 	router.HandleFunc("/edges", GetAllEdges).Methods(http.MethodGet)
+	router.HandleFunc("/dependencies/{id}", GetDownstream).Methods(http.MethodGet)
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 

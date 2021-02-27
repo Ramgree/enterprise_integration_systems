@@ -80,7 +80,7 @@ func TestReadAll(t *testing.T) {
 
 	err = json.NewDecoder(resp.Body).Decode(&state)
 
-	if len(state) != 5 {
+	if len(state) != 7 {
 
 		t.Error("Get all didn't work, oh shizzle", state)
 
