@@ -1,0 +1,35 @@
+version: '3.3'
+services:
+  traefik:
+    image: "traefik:v2.0.0-rc3"
+    container_name: "traefik"
+    command:
+       - "--api.insecure=true"
+       - "--providers.docker=true"
+       - "--providers.docker.exposedbydefault=false"
+       - "--entrypoints.web.address=:80"
+    ports:
+       - "80:80"
+       - "8080:8080"
+    volumes:
+       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  hw1-backend:
+    image: hw1-backend:1.0
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hw1-backend.rule=Host(`localhost`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.hw1-backend.entrypoints=web"
+      - "traefik.http.middlewares.remove-api.stripprefix.prefixes=/api"
+      - "traefik.http.routers.hw1-backend.middlewares=remove-api"
+      - "traefik.port=8000"
+  grafana:
+    image: grafana/grafana
+    labels:
+       - "traefik.enable=true"
+       - "traefik.http.routers.grafana.rule=Host(`localhost`) && PathPrefix(`/mystery`)"
+       - "traefik.http.routers.grafana.entrypoints=web"
+       - "traefik.http.middlewares.remove-mystery.stripprefix.prefixes=/mystery"
+       - "traefik.http.middlewares.add-login.addprefix.prefix=/login"
+       - "traefik.http.routers.grafana.middlewares=remove-mystery"
+       - "traefik.http.routers.grafana.middlewares=add-login"
+       - "traefik.port=3000"

@@ -72,4 +72,7 @@ docker pull localhost:5000/hw1-backend
 
 ### Task 5
 
+Done, the compose file is `docker-compose-task-five.yml`
+
+It will work as long as you have built our backend with the tag `hw1-backend:1.0`
 
