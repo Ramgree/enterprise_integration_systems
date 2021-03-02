@@ -21,3 +21,23 @@ It does **not** check the DAG's acyclicity, it's **on you** to not bug it out.
 If a **TASK DAG** is hard to visualize for you, just look at this picture, you'll get it:
 
 ![DAG](https://i.stack.imgur.com/e0NQk.png)
+
+### Task 2 (Partial)
+
+In order to use the CLI, cd to /frontend folder and run 
+
+``` sh
+
+cobra install todocli
+
+```
+
+After that all the commands can be run with:
+
+``` sh
+1) todocli get-all
+2) ...
+3) ...
+4) ...
+```
+
