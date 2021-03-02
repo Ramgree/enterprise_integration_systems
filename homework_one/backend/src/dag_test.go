@@ -43,6 +43,22 @@ func TestAddNewEdge(t *testing.T) {
 	resp, _ = http.Post(address, "application/json", nil)
 
 }
+
+func TestAddInvalidEdge(t *testing.T) {
+
+	address := "http://localhost:8000/todo/10/13"
+
+	resp, _ := http.Post(address, "application/json", nil)
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 400 {
+
+		t.Error("oh noes =*(", resp.Status)
+
+	}
+
+}
 func TestReadAllEdges(t *testing.T) {
 
 	var resp_struct []*Edge
