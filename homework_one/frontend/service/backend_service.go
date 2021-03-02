@@ -48,3 +48,21 @@ func GetAllEdges() model.EdgeList {
 	 return data
   	
 }
+
+//DeleteTodo sends a delete request to the backend API
+func DeleteTodo(id string){
+	client := &http.Client{}
+	req, err := http.NewRequest("DELETE", baseURL + "/todo/" + id, nil)
+
+	if err != nil {
+		log.Println("an error occurred")
+	}
+
+	_, err = client.Do(req)
+    if err != nil {
+		log.Println("an error occurred")  
+    }else{
+		log.Println("successfully deleted a TODO with ID", id)  
+	}
+
+}
