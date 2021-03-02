@@ -2,11 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"todo_backend/src"
+
+	"github.com/gorilla/mux"
 )
 
 var todos = []*src.Todo{
@@ -77,7 +78,8 @@ func PostCreateTodo(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	json.NewEncoder(w).Encode(todo)
+	json.NewEncoder(w).Encode(todo.Id)
+
 	w.WriteHeader(200)
 
 }
@@ -184,7 +186,7 @@ func PostUpdateTodo(w http.ResponseWriter, r *http.Request) {
 
 	key_value := globalState.Todos[statusChange.Id]
 
-	if key_value  == nil {
+	if key_value == nil {
 
 		w.WriteHeader(400)
 		return
@@ -205,7 +207,7 @@ func DeleteTodo(w http.ResponseWriter, r *http.Request) {
 
 	key_value := globalState.Todos[key]
 
-	if key_value  == nil {
+	if key_value == nil {
 
 		w.WriteHeader(400)
 		return
