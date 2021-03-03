@@ -2,41 +2,36 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"todo_backend/src"
+
+	"github.com/gorilla/mux"
 )
 
 var todos = []*src.Todo{
 	{
-		Id:     "0",
 		Title:  "Turn cluster on",
 		Status: "Unfinished",
 	},
 	{
-		Id:     "1",
 		Title:  "Process data",
 		Status: "Finished",
 	},
 	{
-		Id:     "3",
 		Title:  "Turn another cluster on",
 		Status: "Finished",
 	},
 	{
-		Id:     "4",
 		Title:  "Pay the server bills",
 		Status: "Finished",
 	},
 	{
-		Id:     "6",
 		Title:  "Process more data",
 		Status: "Unfinished",
 	},
 	{
-		Id:     "7",
 		Title:  "Shut down cluster",
 		Status: "Unfinished",
 	},
@@ -44,16 +39,16 @@ var todos = []*src.Todo{
 
 var edges = []*src.Edge{
 	{
-		From: "4",
-		To:   "3",
-	},
-	{
 		From: "3",
-		To:   "6",
+		To:   "2",
 	},
 	{
-		From: "6",
-		To:   "7",
+		From: "4",
+		To:   "5",
+	},
+	{
+		From: "0",
+		To:   "3",
 	},
 }
 
@@ -83,7 +78,9 @@ func PostCreateTodo(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	json.NewEncoder(w).Encode(todo)
+	json.NewEncoder(w).Encode(todo.Id)
+
+	w.WriteHeader(200)
 
 }
 
@@ -94,14 +91,26 @@ func PostCreateEdge(w http.ResponseWriter, r *http.Request) {
 	from := vars["from"]
 	to := vars["to"]
 
-	log.Println("checking the request body for adding new edge: ", from, to)
-	edge := src.Edge{}
-	edge.From = from
-	edge.To = to
+	from_todo, to_todo := globalState.Todos[from], globalState.Todos[to]
 
-	dependencyDAG.AddEdge(&edge)
+	if from_todo == nil || to_todo == nil {
 
-	json.NewEncoder(w).Encode(edge)
+		w.WriteHeader(400)
+		return
+
+	} else {
+
+		log.Println("checking the request body for adding new edge: ", from, to)
+		edge := src.Edge{}
+		edge.From = from
+		edge.To = to
+
+		dependencyDAG.AddEdge(&edge)
+
+		json.NewEncoder(w).Encode(edge)
+		w.WriteHeader(200)
+
+	}
 
 }
 
@@ -110,13 +119,26 @@ func GetTodo(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["id"]
 
-	w.Write(globalState.ReadTodo(key))
+	key_value := globalState.Todos[key]
+
+	if key_value == nil {
+
+		w.WriteHeader(400)
+		return
+
+	} else {
+
+		w.Write(globalState.ReadTodo(key))
+		w.WriteHeader(200)
+
+	}
 
 }
 
 func GetAllTodo(w http.ResponseWriter, r *http.Request) {
 	log.Println("getting all todos")
 	w.Write(globalState.ReadAllTodos())
+	w.WriteHeader(200)
 	log.Println(globalState.Todos)
 
 }
@@ -132,6 +154,7 @@ func GetAllEdges(w http.ResponseWriter, r *http.Request) {
 
 	}
 	w.Write(dependencyDAG.GetEdges())
+	w.WriteHeader(200)
 }
 
 func GetDownstream(w http.ResponseWriter, r *http.Request) {
@@ -139,12 +162,19 @@ func GetDownstream(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["id"]
 
-	//testib := dependencyDAG.DepthFirstSearch(key)
+	key_value := globalState.Todos[key]
 
-	//log.Println("Everything downstream of ", key, " : ", testib)
+	if key_value == nil {
 
-	w.Write(dependencyDAG.DepthFirstSearch(key))
+		w.WriteHeader(400)
+		return
 
+	} else {
+
+		w.Write(dependencyDAG.DepthFirstSearch(key))
+		w.WriteHeader(200)
+
+	}
 }
 
 func PostUpdateTodo(w http.ResponseWriter, r *http.Request) {
@@ -154,10 +184,19 @@ func PostUpdateTodo(w http.ResponseWriter, r *http.Request) {
 	statusChange := src.StatusChange{}
 	json.Unmarshal(reqBody, &statusChange)
 
-	log.Println(statusChange)
-	globalState.UpdateTodo(&statusChange)
+	key_value := globalState.Todos[statusChange.Id]
 
-	json.NewEncoder(w).Encode(statusChange)
+	if key_value == nil {
+
+		w.WriteHeader(400)
+		return
+
+	} else {
+		log.Println(statusChange)
+		globalState.UpdateTodo(&statusChange)
+		json.NewEncoder(w).Encode(statusChange)
+		w.WriteHeader(200)
+	}
 
 }
 
@@ -166,7 +205,18 @@ func DeleteTodo(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["id"]
 
-	globalState.DeleteTodo(key)
+	key_value := globalState.Todos[key]
+
+	if key_value == nil {
+
+		w.WriteHeader(400)
+		return
+
+	} else {
+
+		globalState.DeleteTodo(key)
+		w.WriteHeader(200)
+	}
 
 }
 

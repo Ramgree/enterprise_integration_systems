@@ -3,15 +3,20 @@ package src
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"strconv"
 )
 
 type TodoList struct {
 	Todos map[string]*Todo
+	GlobalCounter int
 }
 
 func NewTodoListAndDag(todos []*Todo, edges []*Edge) (*DAG, *TodoList) {
 
 	var NewTodoList TodoList
+
+	NewTodoList.GlobalCounter = 0
 
 	var NewDAG DAG
 
@@ -19,22 +24,28 @@ func NewTodoListAndDag(todos []*Todo, edges []*Edge) (*DAG, *TodoList) {
 
 	for _, td := range todos {
 
-		NewTodoList.Todos[td.Id] = td
+		NewTodoList.CreateTodo(td)
+
+		//NewTodoList.Todos[td.Id] = td
 
 	}
 
 	NewDAG.nodes = &NewTodoList
 	NewDAG.AdjacencyList = make(map[string]map[string]bool)
 
-	for _, td := range todos {
+	for index, val := range NewDAG.nodes.Todos {
 
-		NewDAG.AdjacencyList[td.Id] = make(map[string]bool)
+		NewDAG.AdjacencyList[index] = make(map[string]bool)
+
+		fmt.Println("Index: ", index, val)
 
 	}
 
 	for _, edge := range edges {
 
 		if (NewDAG.AdjacencyList[edge.From])[edge.To] != true {
+
+			fmt.Println(edge.From, edge.To)
 
 			NewDAG.Edges = append(NewDAG.Edges, edge)
 			(NewDAG.AdjacencyList[edge.From])[edge.To] = true
@@ -58,7 +69,13 @@ type StatusChange struct {
 
 func (t *TodoList) CreateTodo(todo *Todo) {
 
+	newId := &t.GlobalCounter
+
+	todo.Id = strconv.Itoa(*newId)
+
 	t.Todos[todo.Id] = todo
+
+	*newId = *newId + 1
 
 }
 

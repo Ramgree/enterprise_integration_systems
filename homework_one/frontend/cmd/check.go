@@ -21,34 +21,32 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// todoCmd represents the todo command
-var todoCmd = &cobra.Command{
-	Use:   "todo",
-	Short: "A command to add a new item to todo list",
-	Long: `To use this command, type 'todocli todo "Insert your task here!"'.
-	 Optionally, you may want to add dependencies (tasks which are to be completed before this task),
-	 to do this simply add the ids with whitespaces like:
-	  'todocli todo "Insert your task here!" 1 2 3' - to make the program depend on task 1,2 and 3
-	  'todocli todo "Insert your task here!" 1 2 3 4 5' - to make the program depend on task 1,2,3, 4 and 5s
-	  `,
+// checkCmd represents the check command
+var checkCmd = &cobra.Command{
+	Use:   "check",
+	Short: "Manages the status of the todo task",
+	Long:  `To use, type 'todocli check <id> <do|undo>'. This should mark your task as finished or unfinished. `,
 	Run: func(cmd *cobra.Command, args []string) {
-		var id = service.AddTodo(args[0])
-		if id != "" {
-			service.AddDependencies(id, args[1:])
+		if args[1] == "do" {
+			service.Check(args[0], "Finsihed")
 		}
+		if args[1] == "undo" {
+			service.Check(args[0], "Unfinsihed")
+		}
+
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(todoCmd)
+	rootCmd.AddCommand(checkCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// todoCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// checkCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// todoCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// checkCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

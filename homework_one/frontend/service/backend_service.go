@@ -3,6 +3,7 @@ package service
 import (
 	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"todocli/model"
@@ -53,7 +54,7 @@ func GetAllEdges() model.EdgeList {
 //DeleteTodo sends a delete request to the backend API
 func DeleteTodo(id string) {
 	client := &http.Client{}
-	req, err := http.NewRequest("POST", baseURL+"/todo/"+id, nil)
+	req, err := http.NewRequest("DELETE", baseURL+"/todo/"+id, nil)
 
 	if err != nil {
 		log.Println("an error occurred")
@@ -68,7 +69,7 @@ func DeleteTodo(id string) {
 
 }
 
-func AddTodo(title string) int {
+func AddTodo(title string) string {
 	// client := &http.Client{}
 
 	// I'll assume the id is generated on the backend, cuz its kinda bad if we do that on front-end
@@ -84,13 +85,55 @@ func AddTodo(title string) int {
 	resp, err := http.Post(baseURL+"/todo", "application/json",
 		bytes.NewBuffer(jsonData))
 
+	var id_s = ""
+
 	if err != nil {
 		log.Println("an error occurred")
 	} else {
-		log.Println("Successfully added a TODO. It should be visible in your list now. Code:" + resp.Status)
+
+		defer resp.Body.Close()
+		bodyBytes, err := ioutil.ReadAll(resp.Body)
+
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			id_s = string(bodyBytes)
+			id_s = id_s[1 : len(id_s)-2]
+			log.Println("Successfully added a TODO. It should be visible in your list now. New ID:", id_s)
+			return id_s
+
+		}
 	}
 
-	defer resp.Body.Close()
-	// log.Println(json.NewDecoder(resp.Body).Decode())
-	return -1
+	return id_s
+}
+
+func AddDependency(id string, dependency string) {
+	_, err := http.Post(baseURL+"/todo/"+dependency+"/"+id, "application/json",
+		nil)
+
+	if err != nil {
+		log.Println("an error occurred")
+	}
+}
+
+func AddDependencies(id string, dependencies []string) {
+	log.Print(dependencies)
+	for _, dep := range dependencies {
+		AddDependency(id, dep)
+	}
+}
+
+func Check(id string, action string) {
+	var jsonString string = `{ "Id":"` + id + `", "Status":"` + action + `"}`
+
+	log.Print(jsonString)
+	// var processedString = []bytes(jsonString)
+	_, err := http.Post(baseURL+"/todo/"+id, "application/json",
+		bytes.NewBuffer([]byte(jsonString)))
+
+	if err != nil {
+		log.Println("Could not perform this action. ( Check that depending tasks are all checked! )")
+	}
+
 }

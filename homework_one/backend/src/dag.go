@@ -63,7 +63,15 @@ func (d *DAG) DepthFirstSearch(todo string) []byte {
 
 	for todo_id, _ := range visited {
 
-		downstream_nodes = append(downstream_nodes, d.nodes.Todos[todo_id])
+		to_be_added := d.nodes.Todos[todo_id]
+
+		if to_be_added != nil {
+
+			downstream_nodes = append(downstream_nodes, to_be_added)
+
+		}
+
+		//downstream_nodes = append(downstream_nodes, d.nodes.Todos[todo_id])
 
 	}
 
