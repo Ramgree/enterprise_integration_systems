@@ -16,64 +16,36 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-	"todocli/model"
 	"todocli/service"
 
 	"github.com/spf13/cobra"
 )
 
-// getallCmd represents the get_all command
-var getallCmd = &cobra.Command{
-	Use:   "get-all",
-	Short: "See all the TODOs.",
-	Long:  "See all the TODOs.",
+// todoCmd represents the todo command
+var todoCmd = &cobra.Command{
+	Use:   "todo",
+	Short: "A command to add a new item to todo list",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		getAllTodos()
+		service.AddTodo(args[0])
 	},
 }
 
-func getAllTodos() {
-	todos := service.GetAllTodos()
-	edges := service.GetAllEdges()
-
-	for _, todo := range todos {
-
-		completeFirst := filterEdges(*todo.Id, edges)
-
-		fmt.Println()
-
-		fmt.Println("Id:", *todo.Id)
-		fmt.Println("Name:", todo.Title)
-		fmt.Println("Status:", todo.Status)
-		fmt.Println("TODO before this: ", completeFirst)
-
-		fmt.Println()
-	}
-}
-
-func filterEdges(todoID string, edges model.EdgeList) []string {
-	output := []string{}
-
-	for _, edge := range edges {
-		if edge.To == todoID {
-			output = append(output, edge.From)
-		}
-	}
-
-	return output
-}
-
 func init() {
-	rootCmd.AddCommand(getallCmd)
+	rootCmd.AddCommand(todoCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// getallCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// todoCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// getallCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// todoCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

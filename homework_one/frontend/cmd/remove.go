@@ -27,9 +27,9 @@ import (
 var removeCmd = &cobra.Command{
 	Use:   "remove",
 	Short: "remove a TODO",
-	Long: `remove a TODO`,
+	Long:  `remove a TODO`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) != 1{
+		if len(args) != 1 {
 			fmt.Println("incorrect number of args, must be equal to 1")
 			return
 		}

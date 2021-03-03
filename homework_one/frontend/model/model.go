@@ -1,7 +1,7 @@
 package model
 
 type Todo struct {
-	Id     string
+	Id     *string
 	Title  string
 	Status string
 }
