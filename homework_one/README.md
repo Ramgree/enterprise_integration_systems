@@ -22,13 +22,29 @@ If a **TASK DAG** is hard to visualize for you, just look at this picture, you'l
 
 ![DAG](https://i.stack.imgur.com/e0NQk.png)
 
-### Task 2
+### Task 2 (Partial)
 
-No status
+In order to use the CLI, cd to /frontend folder and run 
+
+``` sh
+
+cobra install todocli
+
+```
+
+After that all the commands can be run with:
+
+``` sh
+1) todocli get-all
+2) ...
+3) todo remove "id" (e.g. todo remove 5)
+4) ...
+```
+
 
 ### Task 3
 
-* I guess we've done all functional tests?
+* I guesss we've done all functional tests?
 
 * Dockerized the back end service
 
