@@ -36,9 +36,21 @@ After that all the commands can be run with:
 
 ``` sh
 1) todocli get-all
-2) ...
-3) todo remove "id" (e.g. todo remove 5)
-4) ...
+2) todocli todo <title> [...dependencies], e.g todocli todo "Insert your task here!" 1 2 3
+3) todo remove <id> 
+4) todocli check <id> <do|undo>
+```
+
+Running tests:
+
+``` sh
+cd frontend/test
+go test -v
+```
+
+Before testing, make sure to restart the backend and run 
+``` sh
+go install todocli
 ```
 
 
@@ -50,7 +62,7 @@ After that all the commands can be run with:
 
 * Made the docker compose, but no tests yet
 
-* No integration tests done
+* I guesss we've done more or less all integration tests?
 
 ### Task 4
 

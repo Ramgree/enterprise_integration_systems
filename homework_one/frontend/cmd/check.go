@@ -28,10 +28,10 @@ var checkCmd = &cobra.Command{
 	Long:  `To use, type 'todocli check <id> <do|undo>'. This should mark your task as finished or unfinished. `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if args[1] == "do" {
-			service.Check(args[0], "Finsihed")
+			service.Check(args[0], "Finished")
 		}
 		if args[1] == "undo" {
-			service.Check(args[0], "Unfinsihed")
+			service.Check(args[0], "Unfinished")
 		}
 
 	},

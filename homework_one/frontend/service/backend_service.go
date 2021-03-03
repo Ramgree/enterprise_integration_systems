@@ -60,8 +60,8 @@ func DeleteTodo(id string) {
 		log.Println("an error occurred")
 	}
 
-	_, err = client.Do(req)
-	if err != nil {
+	res, err2 := client.Do(req)
+	if err2 != nil || res.StatusCode != 200 {
 		log.Println("an error occurred")
 	} else {
 		log.Println("successfully deleted a TODO with ID", id)
@@ -118,7 +118,7 @@ func AddDependency(id string, dependency string) {
 }
 
 func AddDependencies(id string, dependencies []string) {
-	log.Print(dependencies)
+	//log.Print(dependencies)
 	for _, dep := range dependencies {
 		AddDependency(id, dep)
 	}
@@ -127,12 +127,11 @@ func AddDependencies(id string, dependencies []string) {
 func Check(id string, action string) {
 	var jsonString string = `{ "Id":"` + id + `", "Status":"` + action + `"}`
 
-	log.Print(jsonString)
 	// var processedString = []bytes(jsonString)
-	_, err := http.Post(baseURL+"/todo/"+id, "application/json",
+	res, err := http.Post(baseURL+"/todo/"+id, "application/json",
 		bytes.NewBuffer([]byte(jsonString)))
 
-	if err != nil {
+	if err != nil || res.StatusCode != 200 {
 		log.Println("Could not perform this action. ( Check that depending tasks are all checked! )")
 	}
 
