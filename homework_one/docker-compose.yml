@@ -4,3 +4,22 @@ services:
         image: hw1-backend:1.0
         ports:
             - "8000:8000"
+        network_mode: host
+    backend-test:
+        image: hw1-backend:1.0
+        network_mode: host
+        depends_on:
+            - frontend-test
+        entrypoint: ["go", "test" ,"./src"]
+    frontend:
+        image: hw1-frontend:1.0
+        network_mode: host
+        depends_on:
+            - backend
+        entrypoint: ["tail", "-f", "/dev/null"]
+    frontend-test:
+        image: hw1-frontend:1.0
+        network_mode: host
+        depends_on:
+            - frontend
+        entrypoint: ["go", "test", "./test"]

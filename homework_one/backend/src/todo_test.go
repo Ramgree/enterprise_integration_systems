@@ -39,7 +39,7 @@ func TestCreateReadTodo(t *testing.T) {
 
 	// Read
 
-	address = "http://localhost:8000/todo/6"
+	address = "http://localhost:8000/todo/9"
 
 	resp, err = http.Get(address)
 
@@ -49,17 +49,17 @@ func TestCreateReadTodo(t *testing.T) {
 
 	defer resp.Body.Close()
 
+	fmt.Println("body: ", resp.Body)
+
 	var resp_struct Todo
 
 	err = json.NewDecoder(resp.Body).Decode(&resp_struct)
 
-	if resp_struct.Id != "6" {
+	if resp_struct.Id != "9" {
 
-		t.Error("Problem reading todo // read", err)
+		t.Error("Problem reading todo // read", resp.Body)
 
 	}
-
-	fmt.Println(resp_struct)
 
 }
 
