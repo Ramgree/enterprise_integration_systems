@@ -86,11 +86,12 @@ docker run -d -p 5000:5000 --name registry registry:2
 
 ```
 
-Then we cloned our repo, built our image, and:
+Then we cloned our repo, built our images, and:
 
 ```sh
 
 docker image tag hw1-backend:1.0 localhost:5000/hw1-backend
+docker image tag hw1-frontend:1.0 localhost:5000/hw1-frontend
 
 ```
 
@@ -99,8 +100,11 @@ then tested by pulling it:
 ```sh
 
 docker pull localhost:5000/hw1-backend
+docker pull localhost:5000/hw1-frontend
 
 ```
+
+And then ran everything using the `docker-compose-task-five.yml`
 
 * We just used a alpine linux image to reduce the size. The original debian one was around ~ 700 mb, the alpine linux hovers around 5 mb, hence we achieved **WHOPPING** 140x smaller image.
 
