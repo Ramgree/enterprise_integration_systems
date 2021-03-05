@@ -104,7 +104,7 @@ docker pull localhost:5000/hw1-frontend
 
 ```
 
-And then ran everything using the `docker-compose-task-five.yml`
+And then ran everything using the `docker-compose-local-registry.yml`
 
 * We just used a alpine linux image to reduce the size. The original debian one was around ~ 700 mb, the alpine linux hovers around 5 mb, hence we achieved **WHOPPING** 140x smaller image.
 
