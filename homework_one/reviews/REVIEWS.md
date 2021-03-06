@@ -3,11 +3,50 @@
 ### Task 1
 
 * Task completed by: Bruno & Jekaterina
-* Reviewer:
+* Reviewer: Bohdan
+
+* Was the stated problem solved in an acceptable manner?
+
+Yes, the backend works as expected, required functionality is implemented, some potential errors are handled.
+
+
+* What has been done well and why?
+
+The code is well-written.
+For every request, it is checked whether the received key exists.
+
+
+* What is not well implemented and why?
+
+Type declarations are all over the place, I think it would be reasonable to add a "model" package. 
+The TODO status is a string, and backend actually allows to set it to anything via a request, instead of just marking it as completed. Update TODO endpoint has an unnecessary path parameter {id}.
+
+
+* How easy is it to understand?
+
+I think the code is quite clear.
+
+
+* Recommendations to simplify
+
+Changing the string "Status" to boolean "isCompleted" would simplify some logic on both front end and back end.
+
+
+
+* Did the implementers use anything special?
+
+Some graph algorithms are probably the most special thing.
+
+
+* Anything else funny?
+
+At some point of development, I found it kinda funny when the create TODO endpoint was expecting the whole object (including the ID).
+
+
 
 ### Task 2 
 
-* Task completed by: Bogdan & Artjom
+* Task completed by: Bohdan & Artem
 * Reviewer: Bruno
 * Was the stated problem solved in an acceptable manner?
 
@@ -39,7 +78,7 @@ I thought it was amusing how they didn't seem to be aware that a go project can 
 
 ### Task 3 
 
-* Task completed by: 1, 2, 3, 5 by Bruno & Jekaterina and 4 by Bogdan
+* Task completed by: 1, 2, 3, 5 by Bruno & Jekaterina and 4 by Bohdan
 * Reviewer:
 
 ### Task 4 
