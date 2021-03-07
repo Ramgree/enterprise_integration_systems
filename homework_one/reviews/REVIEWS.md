@@ -89,4 +89,36 @@ I thought it was amusing how they didn't seem to be aware that a go project can 
 ### Task 5 
 
 * Task completed by: Bruno & Jekaterina
-* Reviwer:
+* Reviwer: Bohdan
+* Was the stated problem solved in an acceptable manner?
+
+Yes. Services are served as required.
+
+* What has been done well and why?
+
+Traefik proxy was setup well, everything is easy to run and verify that it works.
+
+
+* What is not well implemented and why?
+
+At the time of the review the documentation was a bit incomplete, in my opinion.
+
+
+* How easy is it to understand?
+
+Quite easy, thanks to traefik.
+
+
+* Recommendations to simplify
+
+Add examples of all commands needed to run and test the solution (done).
+
+* Did the implementers use anything special?
+
+No.
+
+* Anything else funny?
+
+No.
+
+

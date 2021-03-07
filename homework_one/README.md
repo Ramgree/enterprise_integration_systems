@@ -78,7 +78,7 @@ docker exec -it <id of the front-end container> todocli get-all
 
 The docker registry was set up on a google cloud compute engine.
 
-We did it exactly as on the docker website, not sure how to prove it :D ![here](https://docs.docker.com/registry/)
+We did it exactly as on the docker website, not sure how to prove it :D [here](https://docs.docker.com/registry/)
 
 ```sh
 
@@ -112,6 +112,22 @@ And then ran everything using the `docker-compose-local-registry.yml`
 
 Done, the compose file is `docker-compose-task-five.yml`
 
+```sh
+docker-compose -f docker-compose-task-five.yml up
+```
+
 It will work as long as you have built our backend with the tag `hw1-backend:1.0`
 
+```sh
+cd backend
+docker build -t hw1-backend:1.0 .
+```
+
 We have put Grafana as the extra service under /mystery
+
+To access use:
+
+```sh
+http://localhost/api/
+http://localhost/mystery/
+```
