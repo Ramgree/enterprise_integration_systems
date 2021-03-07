@@ -128,6 +128,6 @@ We have put Grafana as the extra service under /mystery
 To access use:
 
 ```sh
-http://localhost/api/
-http://localhost/mystery/
+http://localhost:80/api/
+http://localhost:80/mystery/
 ```
