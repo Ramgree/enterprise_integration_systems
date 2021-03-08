@@ -76,6 +76,38 @@ No.
 
 I thought it was amusing how they didn't seem to be aware that a go project can be compiled to a binary, making their lifes considerably more complicated than it should have been.
 
+
+
+
+* Reviewer: Jekaterina
+* Was the stated problem solved in an acceptable manner?
+
+Yes, it works as it meant to be.
+
+* What has been done well and why?
+
+Everything works, it's cool.
+
+* What is not well implemented and why?
+
+Can't really say anything new, the problem with the tests was mentioned above.
+
+* How easy is it to understand?
+
+Everything is nice and clear.
+
+* Recommendations to simplify
+
+Pay more attention when writing tests.
+
+* Did the implementers use anything special?
+
+No.
+
+* Anything else funny?
+
+Still no :< 
+
 ### Task 3 
 
 * Task completed by: 1, 2, 3, 5 by Bruno & Jekaterina and 4 by Bohdan
