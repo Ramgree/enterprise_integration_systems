@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"rentit/pkg/domain"
-	"time"
 )
 
 type PlantRepository struct {
@@ -47,13 +46,7 @@ func (r *PlantRepository) GetAll() ([]*domain.Plant, error) {
 
 }
 
-func (r *PlantRepository) EstimateRental(name string, start_date time.Time, end_date time.Time) (float32, error) {
-
-	queryStruct := domain.GetInfoQuery{
-		Plant_name: name,
-		Start_date: start_date,
-		End_date:   end_date,
-	}
+func (r *PlantRepository) EstimateRental(queryStruct *domain.GetInfoQuery) (float32, error) {
 
 	log.Printf("Received an estimation request")
 	query := "select p.plant_daily_rental_price * EXTRACT(DAY FROM ($3::timestamp - $2::timestamp)) from plant p WHERE p.plant_name ILIKE '%' || $1 || '%';"
@@ -76,15 +69,9 @@ func (r *PlantRepository) EstimateRental(name string, start_date time.Time, end_
 
 }
 
-func (r *PlantRepository) AvailabilityCheck(name string, start_date time.Time, end_date time.Time) (bool, error) {
+func (r *PlantRepository) AvailabilityCheck(queryStruct *domain.GetInfoQuery) (bool, error) {
 
-	queryStruct := domain.GetInfoQuery{
-		Plant_name: name,
-		Start_date: start_date,
-		End_date:   end_date,
-	}
-
-	log.Printf("Received an estimation request")
+	log.Printf("Received an availability request")
 	query :=
 		`
 	select CASE

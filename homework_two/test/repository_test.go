@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"rentit/pkg/repository"
+	"rentit/pkg/service"
 	"testing"
 	"time"
 
@@ -23,8 +24,9 @@ func TestGetAll(t *testing.T) {
 	}
 	defer dbConn.Close()
 	plantRepository := repository.NewPlantRepository(dbConn)
+	plantService := service.NewPlantService(plantRepository)
 
-	vals, err := plantRepository.GetAll()
+	vals, err := plantService.GetAll()
 
 	if err != nil {
 		t.Error(err)
@@ -46,6 +48,7 @@ func TestEstimateRental(t *testing.T) {
 	}
 	defer dbConn.Close()
 	plantRepository := repository.NewPlantRepository(dbConn)
+	plantService := service.NewPlantService(plantRepository)
 
 	name := "excavator"
 	var start_date time.Time
@@ -53,7 +56,7 @@ func TestEstimateRental(t *testing.T) {
 	var end_date time.Time
 	end_date, _ = time.Parse(layout, "2020-01-03 00:00:00")
 
-	vals, err := plantRepository.EstimateRental(name, start_date, end_date)
+	vals, err := plantService.EstimateRental(name, start_date, end_date)
 
 	if err != nil {
 		t.Error(err)
@@ -72,6 +75,7 @@ func TestAvailabilityCheck(t *testing.T) {
 	}
 	defer dbConn.Close()
 	plantRepository := repository.NewPlantRepository(dbConn)
+	plantService := service.NewPlantService(plantRepository)
 
 	name := "road roller"
 	var start_date time.Time
@@ -79,7 +83,7 @@ func TestAvailabilityCheck(t *testing.T) {
 	var end_date time.Time
 	end_date, _ = time.Parse(layout, "2020-01-03 00:00:00")
 
-	vals, err := plantRepository.AvailabilityCheck(name, start_date, end_date)
+	vals, err := plantService.AvailabilityCheck(name, start_date, end_date)
 
 	if err != nil {
 		t.Error(err)
@@ -92,7 +96,7 @@ func TestAvailabilityCheck(t *testing.T) {
 	start_date, _ = time.Parse(layout, "2021-10-19 00:00:00")
 	end_date, _ = time.Parse(layout, "2021-10-21 00:00:00")
 
-	vals, err = plantRepository.AvailabilityCheck(name, start_date, end_date)
+	vals, err = plantService.AvailabilityCheck(name, start_date, end_date)
 
 	if err != nil {
 		t.Error(err)
