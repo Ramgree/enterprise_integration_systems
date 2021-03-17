@@ -1,0 +1,45 @@
+syntax="proto3";
+
+package protos;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "rentit/protos";
+
+service RentitService {
+
+    rpc GetAllPlants(google.protobuf.Empty) returns (stream Plant) {}
+    rpc EstimateRental(EstimateRentalRequest) returns (EstimateRentalResponse) {}
+    rpc AvailabilityCheck(AvailabilityCheckRequest) returns (AvailabilityCheckResponse) {}
+
+}
+
+message Plant {
+
+    int32 plant_id = 1;
+    string plant_type_name = 2;
+    float plant_daily_rental_price = 3;
+    string plant_name = 4;
+
+}
+
+message EstimateRentalRequest {
+    string name = 1;
+    google.protobuf.Timestamp start_date = 2;
+    google.protobuf.Timestamp end_date = 3;
+}
+
+message EstimateRentalResponse {
+    float price_estimation = 1;
+}
+
+message AvailabilityCheckRequest {
+    string name = 1;
+    google.protobuf.Timestamp start_date = 2;
+    google.protobuf.Timestamp end_date = 3;
+}
+
+message AvailabilityCheckResponse {
+    bool available = 1;
+}
