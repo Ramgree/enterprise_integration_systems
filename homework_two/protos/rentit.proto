@@ -24,6 +24,10 @@ message Plant {
 
 }
 
+message Plants {
+    repeated Plant plants = 1;
+}
+
 message EstimateRentalRequest {
     string name = 1;
     google.protobuf.Timestamp start_date = 2;
