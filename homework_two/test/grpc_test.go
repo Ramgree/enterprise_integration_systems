@@ -7,7 +7,6 @@ import (
 	"rentit/pkg/repository"
 	"rentit/pkg/service"
 	rentitGrpc "rentit/pkg/transport/grpc"
-	"rentit/protos"
 	"testing"
 	"google.golang.org/grpc/test/bufconn"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -50,7 +49,7 @@ func TestGetAllGrpc(t *testing.T) {
 	plantService := service.NewPlantService(plantRepository)
 
 	s := rentitGrpc.NewRentitServiceServer(plantService)
-	resp, err := s.GetAll(req, protos.RentitService_GetAllPlantsServer)
+	resp, err := s.GetAll(context.Background(), req)
 
 	if err != nil {
 		t.Error("shit", err)

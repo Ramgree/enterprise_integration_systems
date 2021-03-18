@@ -1,12 +1,13 @@
 package grpc
 
 import (
+	"context"
+	"github.com/golang/protobuf/ptypes/empty"
 	"rentit/pkg/domain"
 	"rentit/protos"
 	"time"
-
-	"google.golang.org/protobuf/types/known/emptypb"
 )
+
 type plantService interface {
 	GetAll() ([]*domain.Plant, error)
 	EstimateRental(name string, start_date time.Time, end_date time.Time) (float32, error)
@@ -15,7 +16,6 @@ type plantService interface {
 
 type rentitServiceServer struct {
 	plantService plantService
-	rentitServer protos.UnimplementedRentitServiceServer
 }
 
 func NewRentitServiceServer(pS plantService) *rentitServiceServer {
@@ -24,14 +24,10 @@ func NewRentitServiceServer(pS plantService) *rentitServiceServer {
 	}
 }
 
-func (s *rentitServiceServer) GetAll(req *emptypb.Empty, srv protos.RentitService_GetAllPlantsServer) (*protos.Plants, error) {
+func (s *rentitServiceServer) GetAll(context.Context,*empty.Empty) (*protos.Plants, error) {
 
 	var (
 		plants []*protos.Plant
-		//plant_id                 int32
-		//plant_type_name          string
-		//plant_daily_rental_price float32
-		//plant_name               string
 	)
 	rows, err := s.plantService.GetAll()
 
