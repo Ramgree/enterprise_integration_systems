@@ -13,6 +13,7 @@ import (
 const (
 	logLevel        = "debug"
 	httpServicePort = 8080
+	dateFormat = "2006-01-02"
 )
 
 type plantService interface {
@@ -33,7 +34,9 @@ func NewPlantHandler(pS plantService) *PlantHandler {
 }
 
 func (h *PlantHandler) RegisterRoutes(router *mux.Router) {
-	router.HandleFunc("/plant", h.getAllPlants).Methods(http.MethodGet)
+	router.HandleFunc("/plants", h.getAllPlants).Methods(http.MethodGet)
+	router.HandleFunc("/estimate", h.EstimateRental).Methods(http.MethodGet)
+	router.HandleFunc("/availability", h.AvailabilityCheck).Methods(http.MethodGet)
 }
 
 func (h *PlantHandler) getAllPlants(w http.ResponseWriter, _ *http.Request) {
@@ -47,6 +50,85 @@ func (h *PlantHandler) getAllPlants(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(&plants)
 	if err != nil {
-		log.Errorf("Could not encode json, err %v", err)
+		log.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func (h *PlantHandler) EstimateRental(w http.ResponseWriter, r *http.Request) {
+	name := r.URL.Query().Get("name")
+	startDateStr := r.URL.Query().Get("from")
+	endDateStr := r.URL.Query().Get("to")
+
+	startDate, dateErr1 := time.Parse(dateFormat, startDateStr)
+	endDate, dateErr2 := time.Parse(dateFormat, endDateStr)
+
+	if dateErr1 != nil{
+		log.Error(dateErr1.Error())
+		http.Error(w, dateErr1.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if dateErr2 != nil{
+		log.Error(dateErr2.Error())
+		http.Error(w, dateErr2.Error(), http.StatusBadRequest)
+		return
+	}
+
+	price, err := h.plantService.EstimateRental(name, startDate, endDate)
+
+	if err != nil {
+		log.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+    
+	// write success response
+	w.WriteHeader(http.StatusOK)
+	res := map[string]float32{"price": price}
+	err = json.NewEncoder(w).Encode(res)
+	
+	if err != nil {
+        log.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+    }
+}
+
+func (h *PlantHandler) AvailabilityCheck(w http.ResponseWriter, r *http.Request) {
+	name := r.URL.Query().Get("name")
+	startDateStr := r.URL.Query().Get("from")
+	endDateStr := r.URL.Query().Get("to")
+
+	startDate, dateErr1 := time.Parse(dateFormat, startDateStr)
+	endDate, dateErr2 := time.Parse(dateFormat, endDateStr)
+
+	if dateErr1 != nil{
+		log.Error(dateErr1.Error())
+		http.Error(w, dateErr1.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if dateErr2 != nil{
+		log.Error(dateErr2.Error())
+		http.Error(w, dateErr2.Error(), http.StatusBadRequest)
+		return
+	}
+
+	isAvailable, err := h.plantService.AvailabilityCheck(name, startDate, endDate)
+
+	if err != nil {
+		log.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+    
+	// write success response
+	w.WriteHeader(http.StatusOK)
+	res := map[string]bool{"isAvailable": isAvailable}
+	err = json.NewEncoder(w).Encode(res)
+	
+	if err != nil {
+        log.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+    }
 }

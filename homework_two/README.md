@@ -34,7 +34,7 @@ peace
 Setup 
 
 ```
-go get -d -v ./...
+go get -d -v ./...  to remove annoying VSC errors
 ```
 
 Running

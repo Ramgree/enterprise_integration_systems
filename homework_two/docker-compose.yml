@@ -13,17 +13,18 @@ services:
     repository-service-test:
         image: rentit:1.0
         command: sh -c "sleep 1 && cd test && go test -run='Repository' -v"
-    grpc:
-        image: rentit:1.0
-        # network_mode: host
-        ports:
-        - 10001:10001
-        command: sh -c "go run pkg/transport/grpc/server/main/grpcServer.go"
+    # grpc:
+    #     image: rentit:1.0
+    #     # network_mode: host
+    #     ports:
+    #     - 10001:10001
+    #     command: sh -c "go run pkg/transport/grpc/server/main/grpcServer.go"
     grpc-test:
         image: rentit:1.0
         command: sh -c "sleep 1 && cd test && go test -run='Grpc' -v"
-    http:
+    rentit:
         image: rentit:1.0
         ports:
         - 8080:8080
-        command: sh -c "go run buildIT.go"
+        - 10001:10001
+        command: sh -c "go run main.go"
