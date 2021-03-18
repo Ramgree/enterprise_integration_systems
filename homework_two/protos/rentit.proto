@@ -9,7 +9,7 @@ option go_package = "rentit/protos";
 
 service RentitService {
 
-    rpc GetAllPlants(google.protobuf.Empty) returns (stream Plant) {}
+    rpc GetAllPlants(google.protobuf.Empty) returns (GetAllPlantsResponse) {}
     rpc EstimateRental(EstimateRentalRequest) returns (EstimateRentalResponse) {}
     rpc AvailabilityCheck(AvailabilityCheckRequest) returns (AvailabilityCheckResponse) {}
 
@@ -24,7 +24,7 @@ message Plant {
 
 }
 
-message Plants {
+message GetAllPlantsResponse {
     repeated Plant plants = 1;
 }
 
