@@ -20,7 +20,7 @@ func NewPlantRepository(db *sql.DB) *PlantRepository {
 
 func (r *PlantRepository) GetAll() ([]*domain.Plant, error) {
 	log.Printf("received get all request")
-	query := "SELECT p.plant_id, pt.name, p.plant_daily_rental_price, p.plant_name FROM plant p LEFT JOIN plant_type pt ON pt.plant_type_id = p.plant_type_id;"
+	query := "SELECT p.plant_id, pt.plant_type_name, p.plant_daily_rental_price, p.plant_name FROM plant p LEFT JOIN plant_type pt ON pt.plant_type_id = p.plant_type_id;"
 	rows, err := r.db.QueryContext(context.Background(), query)
 
 	if err != nil {

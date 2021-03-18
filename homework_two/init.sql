@@ -26,7 +26,7 @@ CREATE TABLE booking (
 );
 
 INSERT INTO plant_type
-    (name)
+    (plant_type_name)
 VALUES
     ('mithril'),
     ('adamant'),
@@ -36,28 +36,28 @@ VALUES
 INSERT INTO plant
     (plant_type_id, plant_daily_rental_price, plant_name)
 VALUES
-    ((SELECT plant_type_id FROM plant_type WHERE name ILIKE '%rune%'),
+    ((SELECT plant_type_id FROM plant_type WHERE plant_type_name ILIKE '%rune%'),
      1250,
      'excavator'),
-    ((SELECT plant_type_id FROM plant_type WHERE name ILIKE '%adamant%'),
+    ((SELECT plant_type_id FROM plant_type WHERE plant_type_name ILIKE '%adamant%'),
      5000,
      'bulldozer'),
-    ((SELECT plant_type_id FROM plant_type WHERE name ILIKE '%mithril%'),
+    ((SELECT plant_type_id FROM plant_type WHERE plant_type_name ILIKE '%mithril%'),
      62500,
      'crane'),
-    ((SELECT plant_type_id FROM plant_type WHERE name ILIKE '%rune%'),
+    ((SELECT plant_type_id FROM plant_type WHERE plant_type_name ILIKE '%rune%'),
      2500,
      'dumper'),
-    ((SELECT plant_type_id FROM plant_type WHERE name ILIKE '%dragon%'),
+    ((SELECT plant_type_id FROM plant_type WHERE plant_type_name ILIKE '%dragon%'),
      5000,
      'forklift'),
-    ((SELECT plant_type_id FROM plant_type WHERE name ILIKE '%adamant%'),
+    ((SELECT plant_type_id FROM plant_type WHERE plant_type_name ILIKE '%adamant%'),
      1000,
      'mewp'),
-    ((SELECT plant_type_id FROM plant_type WHERE name ILIKE '%rune%'),
+    ((SELECT plant_type_id FROM plant_type WHERE plant_type_name ILIKE '%rune%'),
      2500,
      'sweeper'),
-    ((SELECT plant_type_id FROM plant_type WHERE name ILIKE '%mithril%'),
+    ((SELECT plant_type_id FROM plant_type WHERE plant_type_name ILIKE '%mithril%'),
      100000,
      'road roller');
 

@@ -30,3 +30,17 @@ Ok?
 ⣿⣿⣧⣀⣿………⣀⣰⣏⣘⣆⣀⠀⠀
 
 peace
+
+Setup 
+
+```
+go get -d -v ./...
+```
+
+Running
+
+```
+docker build -t rentit:1.0 .
+docker-compose up
+```
+
