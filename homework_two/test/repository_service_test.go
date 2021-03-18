@@ -2,7 +2,6 @@ package test
 
 import (
 	"database/sql"
-	"fmt"
 	"rentit/pkg/repository"
 	"rentit/pkg/service"
 	"testing"
@@ -12,12 +11,12 @@ import (
 )
 
 const (
-	postgresConnection = "dbname=postgres host=localhost password=postgres user=postgres sslmode=disable port=5432"
+	postgresConnection = "postgres://postgres:postgres@postgres:5432?sslmode=disable"
 	// What the fuck is this ARBITRARY date????????????????
 	layout = "2006-01-02 15:04:05"
 )
 
-func TestGetAll(t *testing.T) {
+func TestGetAllRepository(t *testing.T) {
 	dbConn, err := sql.Open("postgres", postgresConnection)
 	if err != nil {
 		t.Error(err)
@@ -37,11 +36,11 @@ func TestGetAll(t *testing.T) {
 		if val == nil {
 			t.Error("Nil value")
 		}
-		fmt.Println(*val)
+		//fmt.Println(*val)
 	}
 }
 
-func TestEstimateRental(t *testing.T) {
+func TestEstimateRentalRepository(t *testing.T) {
 	dbConn, err := sql.Open("postgres", postgresConnection)
 	if err != nil {
 		t.Error(err)
@@ -68,7 +67,7 @@ func TestEstimateRental(t *testing.T) {
 
 }
 
-func TestAvailabilityCheck(t *testing.T) {
+func TestAvailabilityCheckRepository(t *testing.T) {
 	dbConn, err := sql.Open("postgres", postgresConnection)
 	if err != nil {
 		t.Error(err)
