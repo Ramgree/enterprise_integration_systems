@@ -8,34 +8,8 @@ import (
 	"rentit/pkg/service"
 	rentitGrpc "rentit/pkg/transport/grpc"
 	"testing"
-	"google.golang.org/grpc/test/bufconn"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
-
-const bufSize = 1024 * 1024
-
-var lis *bufconn.Listener
-/*
-func init() {
-	lis = bufconn.Listen(bufSize)
-	s := grpc.NewServer()
-	plantRepository := repository.NewPlantRepository(dbConn)
-	plantService := service.NewPlantService(plantRepository)
-
-	server := rentitGrpc.NewRentitServiceServer(plantService)
-	protos.RegisterRentitServiceServer(s, &server)
-	go func() {
-		if err := s.Serve(lis); err != nil {
-			log.Fatalf("Server exited with error: %v", err)
-		}
-	}()
-}
-
-func bufDialer(context.Context, string) (net.Conn, error) {
-	return lis.Dial()
-}
-
- */
 
 func TestGetAllGrpc(t *testing.T) {
 
