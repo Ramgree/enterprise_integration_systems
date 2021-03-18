@@ -1,6 +1,7 @@
 package test
 
 import (
+	"context"
 	"database/sql"
 	"rentit/pkg/repository"
 	"rentit/pkg/service"
@@ -13,8 +14,10 @@ import (
 
 const (
 	postgresConnection = "postgres://postgres:postgres@postgres:5432?sslmode=disable"
-	// What the fuck is this ARBITRARY date????????????????
+	// What the duck is this ARBITRARY date????????????????
 	layout = "2006-01-02 15:04:05"
+	redisKey = "app:plant"
+
 )
 
 func TestGetAllRepository(t *testing.T) {
@@ -46,6 +49,17 @@ func TestGetAllRepository(t *testing.T) {
 			t.Error("Nil value")
 		}
 		//fmt.Println(*val)
+	}
+
+	// checking cache
+	cached, cErr := redisConn.Exists(context.Background(), redisKey).Result()
+
+	if cErr != nil{
+		t.Error("Checking cache failed")
+	}
+
+	if cached == 0{
+		t.Error("Plants not found in cache")
 	}
 }
 
