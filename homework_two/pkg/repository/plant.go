@@ -3,28 +3,71 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
 	"rentit/pkg/domain"
+
+	"github.com/go-redis/redis/v8"
+)
+
+const (
+	redisKey = "app:plant"
 )
 
 type PlantRepository struct {
 	db *sql.DB
+	redis *redis.Client
 }
 
-func NewPlantRepository(db *sql.DB) *PlantRepository {
+func NewPlantRepository(db *sql.DB, redis *redis.Client) *PlantRepository {
 	return &PlantRepository{
 		db: db,
+		redis: redis,
 	}
 }
 
 func (r *PlantRepository) GetAll() ([]*domain.Plant, error) {
 	log.Printf("received get all request")
+
+	// checking cache
+	cached, cErr := r.redis.Exists(context.Background(), redisKey).Result()
+
+	if cErr != nil {
+		log.Println("Error checking plants in cache")
+	}
+
+	if cached == 1 {
+		log.Println("Retrieving plants from cache")
+		
+		// results are not in the original order, should be ok as it is not specified in the task
+		res, err := r.redis.HGetAll(context.Background(), redisKey).Result()
+
+		if err != nil {
+			log.Println("Failed to get plants from cache")
+		}
+		
+		plants := []*domain.Plant{}
+		for _, stringValue := range res {
+			b := &domain.Plant{}
+			err := json.Unmarshal([]byte(stringValue), b)
+			if err != nil {
+				log.Println("Error decoding plant from cache")
+				break
+			}
+			plants = append(plants, b)
+		}
+		return plants, nil
+
+	}else{
+		log.Println("Plants not found in cache, querying DB")
+	}
+
 	query := "SELECT p.plant_id, pt.plant_type_name, p.plant_daily_rental_price, p.plant_name FROM plant p LEFT JOIN plant_type pt ON pt.plant_type_id = p.plant_type_id;"
 	rows, err := r.db.QueryContext(context.Background(), query)
 
 	if err != nil {
-		return nil, fmt.Errorf("Error getting all plants, %v", err)
+		return nil, fmt.Errorf("Error getting all plants from the DB, %v", err)
 	}
 
 	plants := make([]*domain.Plant, 0)
@@ -32,9 +75,18 @@ func (r *PlantRepository) GetAll() ([]*domain.Plant, error) {
 		p := &domain.Plant{}
 		err := rows.Scan(&p.Plant_id, &p.Plant_type_name, &p.Plant_daily_rental_price, &p.Plant_name)
 		if err != nil {
-			return nil, fmt.Errorf("error scaning query, %v", err)
+			return nil, fmt.Errorf("Error scaning query, %v", err)
 		}
 		plants = append(plants, p)
+
+		// cache the plant
+		_, cErr := r.redis.HSetNX(context.Background(), redisKey, string(p.Plant_id), p).Result()
+
+		if cErr != nil{
+			log.Println(cErr.Error())
+			log.Println("Failed to cache a plant, idk what to do about it..")
+		}
+
 	}
 
 	err = rows.Close()

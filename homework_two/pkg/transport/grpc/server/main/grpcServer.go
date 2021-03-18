@@ -3,13 +3,14 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"google.golang.org/grpc"
 	"log"
 	"net"
 	"rentit/pkg/repository"
 	"rentit/pkg/service"
 	rentitGrpc "rentit/pkg/transport/grpc"
 	"rentit/protos"
+
+	"google.golang.org/grpc"
 
 	_ "github.com/lib/pq"
 )
@@ -31,7 +32,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Could not connect to postgres: %v", err)
 	}
-	plantRepository := repository.NewPlantRepository(dbConn)
+	// add redis as second argument if this is ever used
+	plantRepository := repository.NewPlantRepository(dbConn, nil)
 	plantService := service.NewPlantService(plantRepository)
 
 	rentitServiceServer := rentitGrpc.NewRentitServiceServer(plantService)

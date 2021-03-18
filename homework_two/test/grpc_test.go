@@ -3,10 +3,6 @@ package test
 import (
 	"context"
 	"database/sql"
-	"github.com/golang/protobuf/ptypes"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/test/bufconn"
-	"google.golang.org/protobuf/types/known/emptypb"
 	"log"
 	"net"
 	"rentit/pkg/repository"
@@ -15,10 +11,19 @@ import (
 	"rentit/protos"
 	"testing"
 	"time"
+
+	"github.com/go-redis/redis/v8"
+	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/test/bufconn"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
+
 // GRPC is awesome in the sense that it provides a mock server to test, without requiring the real server to be running
 const (
-
+	redisURI        = "redis:6379"
+	redisPassword   = "" // no password set
+	redisDB         = 0  // use default DB
 	bufSize = 1024 * 1024
 )
 
@@ -31,7 +36,14 @@ func init() {
 	if err != nil {
 		log.Fatalf("Could not connect to postgres: %v", err)
 	}
-	plantRepository := repository.NewPlantRepository(dbConn)
+
+	redisConn := redis.NewClient(&redis.Options{
+		Addr:     redisURI,
+		Password: redisPassword,
+		DB:       redisDB,
+	})
+	
+	plantRepository := repository.NewPlantRepository(dbConn, redisConn)
 	plantService := service.NewPlantService(plantRepository)
 
 	rentitServiceServer := rentitGrpc.NewRentitServiceServer(plantService)

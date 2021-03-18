@@ -7,6 +7,7 @@ import (
 	"rentit/pkg/service"
 	httpTransport "rentit/pkg/transport/http"
 
+	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 
@@ -24,7 +25,9 @@ const (
 	httpServicePort = 8080
 	grpcServicePort = 10001
 	postgresConnection = "dbname=postgres host=postgres password=postgres user=postgres sslmode=disable port=5432"
-
+	redisURI        = "redis:6379"
+	redisPassword   = "" // no password set
+	redisDB         = 0  // use default DB
 )
 
 func main() {
@@ -36,9 +39,14 @@ func main() {
 	log.SetLevel(level)
 
 
-	// construct http application
+	// construct application
+	redisConn := redis.NewClient(&redis.Options{
+		Addr:     redisURI,
+		Password: redisPassword,
+		DB:       redisDB,
+	})
 	dbConn, err := sql.Open("postgres", postgresConnection)
-	plantRepository := repository.NewPlantRepository(dbConn)
+	plantRepository := repository.NewPlantRepository(dbConn, redisConn)
 	plantService := service.NewPlantService(plantRepository)
 
 	// setup http server

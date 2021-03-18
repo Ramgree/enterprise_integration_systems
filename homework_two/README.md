@@ -44,3 +44,13 @@ docker build -t rentit:1.0 .
 docker-compose up
 ```
 
+OR (if you feel really cool today)
+
+```
+python up.py
+```
+
+------------------------
+
+Also, plants are cached during testing, maybe do smth about it or idk?
+

@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/go-redis/redis/v8"
 	_ "github.com/lib/pq"
 )
 
@@ -22,7 +23,15 @@ func TestGetAllRepository(t *testing.T) {
 		t.Error(err)
 	}
 	defer dbConn.Close()
-	plantRepository := repository.NewPlantRepository(dbConn)
+
+	redisConn := redis.NewClient(&redis.Options{
+		Addr:     redisURI,
+		Password: redisPassword,
+		DB:       redisDB,
+	})
+
+	defer redisConn.Close()
+	plantRepository := repository.NewPlantRepository(dbConn, redisConn)
 	plantService := service.NewPlantService(plantRepository)
 
 	vals, err := plantService.GetAll()
@@ -46,7 +55,16 @@ func TestEstimateRentalRepository(t *testing.T) {
 		t.Error(err)
 	}
 	defer dbConn.Close()
-	plantRepository := repository.NewPlantRepository(dbConn)
+
+	redisConn := redis.NewClient(&redis.Options{
+		Addr:     redisURI,
+		Password: redisPassword,
+		DB:       redisDB,
+	})
+
+	defer redisConn.Close()
+
+	plantRepository := repository.NewPlantRepository(dbConn, redisConn)
 	plantService := service.NewPlantService(plantRepository)
 
 	name := "excavator"
@@ -73,7 +91,16 @@ func TestAvailabilityCheckRepository(t *testing.T) {
 		t.Error(err)
 	}
 	defer dbConn.Close()
-	plantRepository := repository.NewPlantRepository(dbConn)
+
+	redisConn := redis.NewClient(&redis.Options{
+		Addr:     redisURI,
+		Password: redisPassword,
+		DB:       redisDB,
+	})
+
+	defer redisConn.Close()
+
+	plantRepository := repository.NewPlantRepository(dbConn, redisConn)
 	plantService := service.NewPlantService(plantRepository)
 
 	name := "road roller"
