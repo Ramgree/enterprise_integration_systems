@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Homepage WebSocket</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            let socket = new WebSocket("ws://localhost:8081/plants");
+            console.log("Lets goooo");
+
+            socket.onopen = () => {
+                console.log("Connessione open")
+                socket.send("Elo!")
+            }
+
+            socket.onmessage = (ev) =>{
+                console.log(ev)
+            }
+
+            socket.onclose = (event) => {
+                console.log("Connessione closed: ", event)
+            }
+
+            socket.onerror = (error) => {
+                console.log("Error: ", error)
+            }
+        </script>
+    </body>
+</html>

@@ -28,6 +28,7 @@ services:
         image: rentit:1.0
         ports:
         - 8080:8080
+        - 8081:8081
         - 10001:10001
         command: sh -c "go run main.go"
             
