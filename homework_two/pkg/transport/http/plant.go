@@ -124,6 +124,7 @@ func (h *PlantHandler) AvailabilityCheck(w http.ResponseWriter, r *http.Request)
     
 	// write success response
 	w.WriteHeader(http.StatusOK)
+
 	res := map[string]bool{"isAvailable": isAvailable}
 	err = json.NewEncoder(w).Encode(res)
 	
