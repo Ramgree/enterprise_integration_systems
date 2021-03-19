@@ -6,6 +6,7 @@ import (
 	repository "rentit/pkg/repository"
 	"rentit/pkg/service"
 	httpTransport "rentit/pkg/transport/http"
+	rebuildItWS "rentit/pkg/transport/websocket"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/mux"
@@ -21,13 +22,14 @@ import (
 )
 
 const (
-	logLevel        = "debug"
-	httpServicePort = 8080
-	grpcServicePort = 10001
+	logLevel           = "debug"
+	httpServicePort    = 8080
+	grpcServicePort    = 10001
+	wsServicePort      = 8081
 	postgresConnection = "dbname=postgres host=postgres password=postgres user=postgres sslmode=disable port=5432"
-	redisURI        = "redis:6379"
-	redisPassword   = "" // no password set
-	redisDB         = 0  // use default DB
+	redisURI           = "redis:6379"
+	redisPassword      = "" // no password set
+	redisDB            = 0  // use default DB
 )
 
 func main() {
@@ -37,7 +39,6 @@ func main() {
 		panic(err)
 	}
 	log.SetLevel(level)
-
 
 	// construct application
 	redisConn := redis.NewClient(&redis.Options{
@@ -52,6 +53,7 @@ func main() {
 	// setup http server
 	plantHTTPHandler := httpTransport.NewPlantHandler(plantService)
 	httpRouter := mux.NewRouter()
+
 	plantHTTPHandler.RegisterRoutes(httpRouter)
 
 	httpSrv := &http.Server{
@@ -65,11 +67,29 @@ func main() {
 		if err != nil {
 			log.Fatalf("Could not start http server")
 		}
-	}();
+	}()
 
+	// setup WS server
+	websocketRouter := mux.NewRouter()
+	websocketHandler := rebuildItWS.NewRebuildItHandler(plantService)
+	websocketHandler.RegisterRoutes(websocketRouter)
+
+	log.Info("Serving WebSocket (ReBuildIT) on port ", wsServicePort)
+	wsSrv := &http.Server{
+		Addr:    fmt.Sprintf(":%d", wsServicePort),
+		Handler: websocketRouter,
+	}
+
+	go func() {
+		log.Info("Starting ws")
+		err = wsSrv.ListenAndServe()
+		if err != nil {
+			log.Fatalf("Could not start server")
+		}
+	}()
 
 	// setup gRPC server
-	
+
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", grpcServicePort))
 	if err != nil {
 		log.Fatalf("Failed to listen to gRPC port: %v", err)
@@ -80,10 +100,7 @@ func main() {
 
 	log.Infof("Serving gRPC (DestroyIT) on port: %v", grpcServicePort)
 	// make sure to run this on a separate thread when adding WS
+
 	grpcServer.Serve(lis)
-
-
-	// setup WS server
-
 	log.Infof("Stopped application")
 }
