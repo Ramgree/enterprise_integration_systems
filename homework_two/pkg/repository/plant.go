@@ -9,6 +9,8 @@ import (
 	"rentit/pkg/domain"
 
 	"github.com/go-redis/redis/v8"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 const (
@@ -16,14 +18,16 @@ const (
 )
 
 type PlantRepository struct {
-	db    *sql.DB
-	redis *redis.Client
+	mongoClient *mongo.Client
+	db          *sql.DB
+	redis       *redis.Client
 }
 
-func NewPlantRepository(db *sql.DB, redis *redis.Client) *PlantRepository {
+func NewPlantRepository(mongoClient *mongo.Client, db *sql.DB, redis *redis.Client) *PlantRepository {
 	return &PlantRepository{
-		db:    db,
-		redis: redis,
+		mongoClient: mongoClient,
+		db:          db,
+		redis:       redis,
 	}
 }
 
@@ -63,9 +67,31 @@ func (r *PlantRepository) GetAll() ([]*domain.Plant, error) {
 		log.Println("Plants not found in cache, querying DB")
 	}
 
+	// postgres
 	query := "SELECT p.plant_id, pt.plant_type_name, p.plant_daily_rental_price, p.plant_name FROM plant p LEFT JOIN plant_type pt ON pt.plant_type_id = p.plant_type_id;"
 	rows, err := r.db.QueryContext(context.Background(), query)
 
+	//mongo
+	mongoList, err := r.mongoClient.Database("Plants").Collection("plant").Find(context.Background(), bson.D{})
+	results := []*domain.Plant{}
+	if err != nil {
+
+		fmt.Println(err)
+
+	}
+	for mongoList.Next(context.Background()) {
+
+		elem := &domain.Plant{}
+		err := mongoList.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		results = append(results, elem)
+	}
+	mongoList.Close(context.Background())
+
+	// Processing all the queries
 	if err != nil {
 		return nil, fmt.Errorf("Error getting all plants from the DB, %v", err)
 	}
@@ -94,6 +120,10 @@ func (r *PlantRepository) GetAll() ([]*domain.Plant, error) {
 		return nil, fmt.Errorf("could not close rows, %v", err)
 	}
 
+	// combine mongo and postgres
+	for _, elem := range results {
+		plants = append(plants, elem)
+	}
 	return plants, nil
 
 }

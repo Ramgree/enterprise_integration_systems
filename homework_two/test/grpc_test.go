@@ -14,6 +14,8 @@ import (
 
 	"github.com/go-redis/redis/v8"
 	"github.com/golang/protobuf/ptypes"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/test/bufconn"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -37,13 +39,19 @@ func init() {
 		log.Fatalf("Could not connect to postgres: %v", err)
 	}
 
+	mongoConn := options.Client().ApplyURI("mongodb://localhost:27017/")
+	clientMongo, err := mongo.Connect(context.Background(), mongoConn)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	redisConn := redis.NewClient(&redis.Options{
 		Addr:     redisURI,
 		Password: redisPassword,
 		DB:       redisDB,
 	})
 
-	plantRepository := repository.NewPlantRepository(dbConn, redisConn)
+	plantRepository := repository.NewPlantRepository(clientMongo, dbConn, redisConn)
 	plantService := service.NewPlantService(plantRepository)
 
 	rentitServiceServer := rentitGrpc.NewRentitServiceServer(plantService)

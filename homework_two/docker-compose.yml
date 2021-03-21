@@ -48,6 +48,7 @@ services:
         depends_on: 
             - redis
             - postgres
+            - mongo
     
     rentit:
         image: rentit:1.0
