@@ -16,20 +16,21 @@ import (
 )
 
 const (
+	mongoConnection = "mongodb://localhost:27017/"
 	postgresConnection = "dbname=postgres host=localhost password=postgres user=postgres sslmode=disable port=5432"
 	// What the duck is this ARBITRARY date????????????????
 	layout   = "2006-01-02 15:04:05"
 	redisKey = "app:plant"
 )
 
-func TestGetAllRepository(t *testing.T) {
+func TestGetAllService(t *testing.T) {
 	dbConn, err := sql.Open("postgres", postgresConnection)
 	if err != nil {
 		t.Error(err)
 	}
 	defer dbConn.Close()
 
-	mongoConn := options.Client().ApplyURI("mongodb://localhost:27017/")
+	mongoConn := options.Client().ApplyURI(mongoConnection)
 	clientMongo, err := mongo.Connect(context.Background(), mongoConn)
 	if err != nil {
 		log.Fatal(err)
@@ -71,14 +72,14 @@ func TestGetAllRepository(t *testing.T) {
 	}
 }
 
-func TestEstimateRentalRepository(t *testing.T) {
+func TestEstimateRentalService(t *testing.T) {
 	dbConn, err := sql.Open("postgres", postgresConnection)
 	if err != nil {
 		t.Error(err)
 	}
 	defer dbConn.Close()
 
-	mongoConn := options.Client().ApplyURI("mongodb://localhost:27017/")
+	mongoConn := options.Client().ApplyURI(mongoConnection)
 	clientMongo, err := mongo.Connect(context.Background(), mongoConn)
 	if err != nil {
 		log.Fatal(err)
@@ -113,14 +114,14 @@ func TestEstimateRentalRepository(t *testing.T) {
 
 }
 
-func TestAvailabilityCheckRepository(t *testing.T) {
+func TestAvailabilityCheckService(t *testing.T) {
 	dbConn, err := sql.Open("postgres", postgresConnection)
 	if err != nil {
 		t.Error(err)
 	}
 	defer dbConn.Close()
 
-	mongoConn := options.Client().ApplyURI("mongodb://localhost:27017/")
+	mongoConn := options.Client().ApplyURI(mongoConnection)
 	clientMongo, err := mongo.Connect(context.Background(), mongoConn)
 	if err != nil {
 		log.Fatal(err)
@@ -137,11 +138,11 @@ func TestAvailabilityCheckRepository(t *testing.T) {
 	plantRepository := repository.NewPlantRepository(clientMongo, dbConn, redisConn)
 	plantService := service.NewPlantService(plantRepository)
 
-	name := "road roller"
+	name := "crane"
 	var start_date time.Time
-	start_date, _ = time.Parse(layout, "2020-01-01 00:00:00")
+	start_date, _ = time.Parse(layout, "2021-11-17 00:00:00")
 	var end_date time.Time
-	end_date, _ = time.Parse(layout, "2020-01-03 00:00:00")
+	end_date, _ = time.Parse(layout, "2021-11-20 00:00:00")
 
 	vals, err := plantService.AvailabilityCheck(name, start_date, end_date)
 
@@ -149,7 +150,7 @@ func TestAvailabilityCheckRepository(t *testing.T) {
 		t.Error(err)
 	}
 
-	if vals != true {
+	if vals != false {
 		t.Error("Wrong availability response", vals)
 	}
 
@@ -162,7 +163,7 @@ func TestAvailabilityCheckRepository(t *testing.T) {
 		t.Error(err)
 	}
 
-	if vals != false {
+	if vals != true {
 		t.Error("wrong availability response", vals)
 	}
 

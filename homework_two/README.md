@@ -14,7 +14,7 @@ docker-compose up
 OR better
 
 ```
-python up.py
+python scripts/up.py
 ```
 
 ## Checking if we are successful individuals
@@ -22,7 +22,7 @@ python up.py
 Mocks set of commands that will run in Github actions
 
 ```
-python autograding.py
+python scripts/autograding.py
 ```
 
 ## Stuff to think about

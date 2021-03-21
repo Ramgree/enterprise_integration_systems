@@ -88,7 +88,7 @@ func verifyPrice(t *testing.T, url string, expected float32){
 
 func TestAvailabilityHttp(t *testing.T) {
 	verifyAvailability(t, "http://localhost:%d/availability?name=bulldozer&from=2021-10-19&to=2021-10-21", true)
-	verifyAvailability(t, "http://localhost:%d/availability?name=forklift&from=2021-10-19&to=2021-10-21", true)
+	verifyAvailability(t, "http://localhost:%d/availability?name=crane&from=2021-11-18&to=2021-11-20", false)
 }
 
 func verifyAvailability(t *testing.T, url string, expected bool){

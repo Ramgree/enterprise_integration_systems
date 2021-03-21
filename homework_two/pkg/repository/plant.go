@@ -15,6 +15,8 @@ import (
 
 const (
 	redisKey = "app:plant"
+	mongoDbName = "Plants"
+	mongoCollectionName = "plant"
 )
 
 type PlantRepository struct {
@@ -72,7 +74,7 @@ func (r *PlantRepository) GetAll() ([]*domain.Plant, error) {
 	rows, err := r.db.QueryContext(context.Background(), query)
 
 	//mongo
-	mongoList, err := r.mongoClient.Database("Plants").Collection("plant").Find(context.Background(), bson.D{})
+	mongoList, err := r.mongoClient.Database(mongoDbName).Collection(mongoCollectionName).Find(context.Background(), bson.D{})
 	results := []*domain.Plant{}
 	if err != nil {
 

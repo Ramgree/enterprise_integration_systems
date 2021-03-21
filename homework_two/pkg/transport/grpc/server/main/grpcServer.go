@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"net"
@@ -28,12 +27,12 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	dbConn, err := sql.Open("postgres", postgresConnection)
+	//dbConn, err := sql.Open("postgres", postgresConnection)
 	if err != nil {
 		log.Fatalf("Could not connect to postgres: %v", err)
 	}
-	// add redis as second argument if this is ever used
-	plantRepository := repository.NewPlantRepository(dbConn, nil)
+	// add arguments if this is ever used
+	plantRepository := repository.NewPlantRepository(nil, nil, nil)
 	plantService := service.NewPlantService(plantRepository)
 
 	rentitServiceServer := rentitGrpc.NewRentitServiceServer(plantService)
