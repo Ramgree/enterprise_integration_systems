@@ -17,6 +17,16 @@ services:
         ports:
         - 6379:6379
 
+    mongo:
+        image: mongo
+        restart: always
+        ports:
+                - 27017:27017
+        environment:
+                MONGO_INITDB_DATABASE: Plants
+        volumes:
+                - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
     # autograding is gonna run this
     rentit-test:
         image: rentit:1.0

@@ -25,7 +25,7 @@ type RebuildItService struct {
 func NewRebuildItHandler(pS plantService, ws websocket.Upgrader) *RebuildItService {
 	return &RebuildItService{
 		plantService: pS,
-		wsUpgrader: ws,
+		wsUpgrader:   ws,
 	}
 }
 

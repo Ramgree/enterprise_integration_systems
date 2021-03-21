@@ -13,7 +13,7 @@ import (
 const (
 	logLevel        = "debug"
 	httpServicePort = 8080
-	dateFormat = "2006-01-02"
+	dateFormat      = "2006-01-02"
 )
 
 type plantService interface {
@@ -25,7 +25,6 @@ type plantService interface {
 type PlantHandler struct {
 	plantService plantService
 }
-
 
 func NewPlantHandler(pS plantService) *PlantHandler {
 	return &PlantHandler{
@@ -63,13 +62,13 @@ func (h *PlantHandler) EstimateRental(w http.ResponseWriter, r *http.Request) {
 	startDate, dateErr1 := time.Parse(dateFormat, startDateStr)
 	endDate, dateErr2 := time.Parse(dateFormat, endDateStr)
 
-	if dateErr1 != nil{
+	if dateErr1 != nil {
 		log.Error(dateErr1.Error())
 		http.Error(w, dateErr1.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if dateErr2 != nil{
+	if dateErr2 != nil {
 		log.Error(dateErr2.Error())
 		http.Error(w, dateErr2.Error(), http.StatusBadRequest)
 		return
@@ -82,16 +81,16 @@ func (h *PlantHandler) EstimateRental(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-    
+
 	// write success response
 	w.WriteHeader(http.StatusOK)
 	res := map[string]float32{"price": price}
 	err = json.NewEncoder(w).Encode(res)
-	
+
 	if err != nil {
-        log.Error(err.Error())
+		log.Error(err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-    }
+	}
 }
 
 func (h *PlantHandler) AvailabilityCheck(w http.ResponseWriter, r *http.Request) {
@@ -102,13 +101,13 @@ func (h *PlantHandler) AvailabilityCheck(w http.ResponseWriter, r *http.Request)
 	startDate, dateErr1 := time.Parse(dateFormat, startDateStr)
 	endDate, dateErr2 := time.Parse(dateFormat, endDateStr)
 
-	if dateErr1 != nil{
+	if dateErr1 != nil {
 		log.Error(dateErr1.Error())
 		http.Error(w, dateErr1.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if dateErr2 != nil{
+	if dateErr2 != nil {
 		log.Error(dateErr2.Error())
 		http.Error(w, dateErr2.Error(), http.StatusBadRequest)
 		return
@@ -121,15 +120,15 @@ func (h *PlantHandler) AvailabilityCheck(w http.ResponseWriter, r *http.Request)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-    
+
 	// write success response
 	w.WriteHeader(http.StatusOK)
 
 	res := map[string]bool{"isAvailable": isAvailable}
 	err = json.NewEncoder(w).Encode(res)
-	
+
 	if err != nil {
-        log.Error(err.Error())
+		log.Error(err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-    }
+	}
 }

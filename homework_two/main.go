@@ -72,7 +72,7 @@ func main() {
 
 	// setup WS server
 	websocketRouter := mux.NewRouter()
-	upgrader := websocket.Upgrader{CheckOrigin: func(r *http.Request) bool { return true},}
+	upgrader := websocket.Upgrader{CheckOrigin: func(r *http.Request) bool { return true }}
 	websocketHandler := rebuildItWS.NewRebuildItHandler(plantService, upgrader)
 	websocketHandler.RegisterRoutes(websocketRouter)
 
