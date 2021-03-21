@@ -3,7 +3,6 @@ package test
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"rentit/pkg/domain"
 	"testing"
@@ -96,7 +95,7 @@ func verifyAvailability(t *testing.T, url string, expected bool){
 	resp, err := http.Get(fmt.Sprintf(url, port))
 
 	if err != nil {
-		t.Error("Failed to get availability: " +err.Error())
+		t.Error("Failed to get availability: " + err.Error())
 		return 
 	}
 
@@ -104,10 +103,9 @@ func verifyAvailability(t *testing.T, url string, expected bool){
 
 	var data map[string]bool
 
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
-		t.Error(fmt.Sprintf("Couldn't decode the response \"%s\"", string(bodyBytes)))
+		t.Error("Couldn't decode the response: " + err.Error())
 		return 
 	}
 

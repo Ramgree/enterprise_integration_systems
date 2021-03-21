@@ -124,7 +124,7 @@ func (r *PlantRepository) EstimateRental(queryStruct *domain.GetInfoQuery) (floa
 func (r *PlantRepository) AvailabilityCheck(queryStruct *domain.GetInfoQuery) (bool, error) {
 
 	log.Printf("Received an availability request")
-	// Should it be returning true when Plant doesn't exist, hmmmm
+
 	query :=
 		`
 	select CASE
