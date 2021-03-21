@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	repository "rentit/pkg/repository"
@@ -20,6 +21,9 @@ import (
 
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 const (
@@ -48,7 +52,14 @@ func main() {
 		DB:       redisDB,
 	})
 	dbConn, err := sql.Open("postgres", postgresConnection)
-	plantRepository := repository.NewPlantRepository(dbConn, redisConn)
+
+	mongoConn := options.Client().ApplyURI("mongodb://mongo:27017/")
+	clientMongo, err := mongo.Connect(context.Background(), mongoConn)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	plantRepository := repository.NewPlantRepository(clientMongo, dbConn, redisConn)
 	plantService := service.NewPlantService(plantRepository)
 
 	// setup http server
