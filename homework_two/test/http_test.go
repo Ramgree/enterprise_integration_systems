@@ -17,7 +17,7 @@ func TestGetAllHttp(t *testing.T) {
 	resp, err := http.Get(fmt.Sprintf("http://localhost:%d/plants", port))
 
 	if err != nil {
-		t.Error("Failed to get all plants")
+		t.Error("Failed to get all plants: " + err.Error())
 		return 
 	}
 
@@ -26,7 +26,7 @@ func TestGetAllHttp(t *testing.T) {
 	var data []*domain.Plant
 
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
-		t.Error("Couldn't decode the response")
+		t.Error("Couldn't decode the response: " + err.Error())
 		return 
 	}
 
@@ -46,7 +46,7 @@ func verifyPrice(t *testing.T, url string, expected float32){
 	resp, err := http.Get(fmt.Sprintf(url, port))
 
 	if err != nil {
-		t.Error("Failed to get estimate")
+		t.Error("Failed to get estimate: " + err.Error())
 		return 
 	}
 
@@ -55,7 +55,7 @@ func verifyPrice(t *testing.T, url string, expected float32){
 	var data map[string]float32
 
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
-		t.Error("Couldn't decode the response")
+		t.Error("Couldn't decode the response: " + err.Error())
 		return 
 	}
 
@@ -88,7 +88,7 @@ func verifyAvailability(t *testing.T, url string, expected bool){
 	resp, err := http.Get(fmt.Sprintf(url, port))
 
 	if err != nil {
-		t.Error("Failed to get availability")
+		t.Error("Failed to get availability: " +err.Error())
 		return 
 	}
 
@@ -105,7 +105,7 @@ func verifyAvailability(t *testing.T, url string, expected bool){
 
 	for key, _ := range data {
 		if key != "isAvailable"{
-			t.Error("Invalid field in the response")
+			t.Error("Invalid field in the response: " + err.Error())
 		}
 	}
 

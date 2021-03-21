@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	postgresConnection = "postgres://postgres:postgres@postgres:5432?sslmode=disable"
+	postgresConnection = "dbname=postgres host=localhost password=postgres user=postgres sslmode=disable port=5432"
 	// What the duck is this ARBITRARY date????????????????
 	layout = "2006-01-02 15:04:05"
 	redisKey = "app:plant"
