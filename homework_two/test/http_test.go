@@ -14,6 +14,9 @@ const (
 )
 
 func TestGetAllHttp(t *testing.T) {
+
+	expectedCount := 8
+
 	resp, err := http.Get(fmt.Sprintf("http://localhost:%d/plants", port))
 
 	if err != nil {
@@ -30,9 +33,14 @@ func TestGetAllHttp(t *testing.T) {
 		return 
 	}
 
+	if len(data) != expectedCount{
+		t.Error(fmt.Sprintf("Expected %d results, got %d", expectedCount, len(data)))
+		return 
+	}
+
 	for _, plant := range data {
 		if plant == nil{
-			t.Error("Plant was nil")
+			t.Error("One plant was nil")
 		}
 	}
 }
