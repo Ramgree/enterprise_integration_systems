@@ -22,20 +22,20 @@ type RebuildItService struct {
 	wsUpgrader   websocket.Upgrader
 }
 
-func NewRebuildItHandler(pS plantService) *RebuildItService {
+func NewRebuildItHandler(pS plantService, ws websocket.Upgrader) *RebuildItService {
 	return &RebuildItService{
 		plantService: pS,
+		wsUpgrader:   ws,
 	}
 }
 
 func (h *RebuildItService) RegisterRoutes(router *mux.Router) {
-	router.HandleFunc("/plant", h.GetAll).Methods(http.MethodGet)
+	router.HandleFunc("/plants", h.GetAll)
 	// router.HandleFunc("/estimate", h.EstimateRental).Methods(http.MethodGet)
 	// router.HandleFunc("/estimate", h.AvailabilityCheck).Methods(http.MethodGet)
 }
 
 func (h *RebuildItService) GetAll(w http.ResponseWriter, r *http.Request) {
-	log.Info("helo")
 	c, err := h.wsUpgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Print("upgrade:", err)
@@ -58,7 +58,7 @@ func (h *RebuildItService) GetAll(w http.ResponseWriter, r *http.Request) {
 	}
 
 	plantsList, err := json.Marshal(plants)
-	err = c.WriteMessage(0, plantsList)
+	err = c.WriteMessage(mt, plantsList)
 	if err != nil {
 		log.Println("write:", err)
 	}

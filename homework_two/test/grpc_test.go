@@ -21,10 +21,10 @@ import (
 
 // GRPC is awesome in the sense that it provides a mock server to test, without requiring the real server to be running
 const (
-	redisURI        = "redis:6379"
-	redisPassword   = "" // no password set
-	redisDB         = 0  // use default DB
-	bufSize = 1024 * 1024
+	redisURI      = "localhost:6379"
+	redisPassword = "" // no password set
+	redisDB       = 0  // use default DB
+	bufSize       = 1024 * 1024
 )
 
 var lis *bufconn.Listener
@@ -42,7 +42,7 @@ func init() {
 		Password: redisPassword,
 		DB:       redisDB,
 	})
-	
+
 	plantRepository := repository.NewPlantRepository(dbConn, redisConn)
 	plantService := service.NewPlantService(plantRepository)
 
@@ -163,8 +163,6 @@ func TestAvailabilityCheckGrpc(t *testing.T) {
 	if resp.Available != false {
 		t.Errorf("Availability not as expected %v", resp.Available)
 	}
-
-
 
 	log.Printf("Resp: %v", resp)
 

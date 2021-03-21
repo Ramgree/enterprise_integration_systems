@@ -16,13 +16,13 @@ const (
 )
 
 type PlantRepository struct {
-	db *sql.DB
+	db    *sql.DB
 	redis *redis.Client
 }
 
 func NewPlantRepository(db *sql.DB, redis *redis.Client) *PlantRepository {
 	return &PlantRepository{
-		db: db,
+		db:    db,
 		redis: redis,
 	}
 }
@@ -39,14 +39,14 @@ func (r *PlantRepository) GetAll() ([]*domain.Plant, error) {
 
 	if cached == 1 {
 		log.Println("Retrieving plants from cache")
-		
+
 		// results are not in the original order, should be ok as it is not specified in the task
 		res, err := r.redis.HGetAll(context.Background(), redisKey).Result()
 
 		if err != nil {
 			log.Println("Failed to get plants from cache")
 		}
-		
+
 		plants := []*domain.Plant{}
 		for _, stringValue := range res {
 			b := &domain.Plant{}
@@ -59,7 +59,7 @@ func (r *PlantRepository) GetAll() ([]*domain.Plant, error) {
 		}
 		return plants, nil
 
-	}else{
+	} else {
 		log.Println("Plants not found in cache, querying DB")
 	}
 
@@ -82,7 +82,7 @@ func (r *PlantRepository) GetAll() ([]*domain.Plant, error) {
 		// cache the plant
 		_, cErr := r.redis.HSetNX(context.Background(), redisKey, string(p.Plant_id), p).Result()
 
-		if cErr != nil{
+		if cErr != nil {
 			log.Println(cErr.Error())
 			log.Println("Failed to cache a plant, idk what to do about it..")
 		}
@@ -124,6 +124,7 @@ func (r *PlantRepository) EstimateRental(queryStruct *domain.GetInfoQuery) (floa
 func (r *PlantRepository) AvailabilityCheck(queryStruct *domain.GetInfoQuery) (bool, error) {
 
 	log.Printf("Received an availability request")
+
 	query :=
 		`
 	select CASE

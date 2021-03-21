@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 	log "github.com/sirupsen/logrus"
 
 	"database/sql"
@@ -71,7 +72,8 @@ func main() {
 
 	// setup WS server
 	websocketRouter := mux.NewRouter()
-	websocketHandler := rebuildItWS.NewRebuildItHandler(plantService)
+	upgrader := websocket.Upgrader{CheckOrigin: func(r *http.Request) bool { return true }}
+	websocketHandler := rebuildItWS.NewRebuildItHandler(plantService, upgrader)
 	websocketHandler.RegisterRoutes(websocketRouter)
 
 	log.Info("Serving WebSocket (ReBuildIT) on port ", wsServicePort)
@@ -81,7 +83,6 @@ func main() {
 	}
 
 	go func() {
-		log.Info("Starting ws")
 		err = wsSrv.ListenAndServe()
 		if err != nil {
 			log.Fatalf("Could not start server")
