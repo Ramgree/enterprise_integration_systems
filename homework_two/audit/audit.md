@@ -5,7 +5,7 @@
 
 * Was the stated problem solved in an acceptable manner?
 
-- Yes, everything works as expected.
+Yes, everything works as expected.
 
 * What has been done well and why?
 
@@ -14,26 +14,26 @@
 
 * What is not well implemented and why?
 
-- Probably, there could be more ORM-like approach, instead of writing plain SQL.
+Probably, there could be more ORM-like approach, instead of writing plain SQL.
 
 
 * How easy is it to understand?
 
-- The code is self-explanatory.
+The code is self-explanatory.
 
 * Recommendations to simplify
 
-- Use ORM.
+Use ORM.
 
 
 * Did the implementers use anything special?
 
-- SQL scripts sometimes were rather complicated, but work well.
+SQL scripts sometimes were rather complicated, but work well.
 
 
 * Anything else funny?
 
-- Its difficult to say, that there is anything funny in databases.
+Its difficult to say, that there is anything funny in databases.
 
 ### Core: MongoDB
 
@@ -186,39 +186,39 @@
 ### Core: gRPC
 
 * Task completed by: Bruno
-* Reviewer: 
+* Reviewer: Bohdan
 
 * Was the stated problem solved in an acceptable manner?
 
--
+Yes, gRPC interface works as expected (verified by tests) and the code looks alright.
 
 * What has been done well and why?
 
--
+Personally, I think gRPC is not the simplest thing, so good job for adding it to our project.
 
 
 * What is not well implemented and why?
 
--
+I don't see any problems, everything seems to be pretty consistent.
 
 
 * How easy is it to understand?
 
--
+Some parts are not easy for me, but all the abstractions are very clear.
 
 * Recommendations to simplify
 
--
+None.
 
 
 * Did the implementers use anything special?
 
--
+No.
 
 
 * Anything else funny?
 
--
+No.
 
 
 ### Testing
@@ -228,35 +228,35 @@
 
 * Was the stated problem solved in an acceptable manner?
 
-- Yes, everything works.
+Yes, everything works.
 
 * What has been done well and why?
 
-- Full coverage, everything is running well.
+Full coverage, everything is running well.
 
 
 * What is not well implemented and why?
 
-- GRPC test could be a bit better (code style and more test-cases)
+GRPC test could be a bit better (code style and more test-cases)
 
 
 * How easy is it to understand?
 
-- Pretty easy. The tests are intuitive.
+Pretty easy. The tests are intuitive.
 
 * Recommendations to simplify
 
-- Make "dummy" variables in a separate file, and use where needed by importing (tests are basically testing the same thing but on different protocols). Also preferred pattern to have another database (like H2) to conduct tests, so they do not affect main DB.
+Make "dummy" variables in a separate file, and use where needed by importing (tests are basically testing the same thing but on different protocols). Also preferred pattern to have another database (like H2) to conduct tests, so they do not affect main DB.
 
 
 * Did the implementers use anything special?
 
-- I wouldn't say so.
+I wouldn't say so.
 
 
 * Anything else funny?
 
-- How Rucy keeps praising GRPC. How there don't seem to be a lot of other comments in the code.
+How Rucy keeps praising GRPC. How there don't seem to be a lot of other comments in the code.
 
 ### Documentation: HTTP
 
@@ -335,39 +335,39 @@
 ### Documentation: gRPC
 
 * Task completed by: Bruno
-* Reviewer: 
+* Reviewer: Bohdan
 
 * Was the stated problem solved in an acceptable manner?
 
--
+Since I am not experienced with requirements for implementing gRPC clients I would say yes. Proto file is indeed self-explanatory.
 
 * What has been done well and why?
 
--
+Not much to talk about here.
 
 
 * What is not well implemented and why?
 
--
+Some human language descriptions would be nice.
 
 
 * How easy is it to understand?
 
--
+Easy for me.
 
 * Recommendations to simplify
 
--
+None.
 
 
 * Did the implementers use anything special?
 
--
+No.
 
 
 * Anything else funny?
 
--
+No.
 
 ### Deployment
 
