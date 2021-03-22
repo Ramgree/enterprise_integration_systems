@@ -35,8 +35,3 @@ Mocks set of commands that will run in Github actions
 ```
 python scripts/autograding.py
 ```
-
-## Stuff to think about
-------------------------
-
-* Plants are cached during testing, maybe do smth about it or no?
