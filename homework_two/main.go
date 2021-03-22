@@ -6,7 +6,7 @@ import (
 	"net/http"
 	repository "rentit/pkg/repository"
 	"rentit/pkg/service"
-	httpTransport "rentit/pkg/transport/http"
+	rentitHttp "rentit/pkg/transport/http"
 	rebuildItWS "rentit/pkg/transport/websocket"
 
 	"github.com/go-redis/redis/v8"
@@ -32,9 +32,10 @@ const (
 	grpcServicePort    = 10001
 	wsServicePort      = 8081
 	postgresConnection = "dbname=postgres host=postgres password=postgres user=postgres sslmode=disable port=5432"
+	mongoURI 		   = "mongodb://mongo:27017/"
 	redisURI           = "redis:6379"
-	redisPassword      = "" // no password set
-	redisDB            = 0  // use default DB
+	redisPassword      = ""
+	redisDB            = 0  
 )
 
 func main() {
@@ -53,7 +54,7 @@ func main() {
 	})
 	dbConn, err := sql.Open("postgres", postgresConnection)
 
-	mongoConn := options.Client().ApplyURI("mongodb://mongo:27017/")
+	mongoConn := options.Client().ApplyURI(mongoURI)
 	clientMongo, err := mongo.Connect(context.Background(), mongoConn)
 	if err != nil {
 		log.Fatal(err)
@@ -63,7 +64,7 @@ func main() {
 	plantService := service.NewPlantService(plantRepository)
 
 	// setup http server
-	plantHTTPHandler := httpTransport.NewPlantHandler(plantService)
+	plantHTTPHandler := rentitHttp.NewPlantHandler(plantService)
 	httpRouter := mux.NewRouter()
 
 	plantHTTPHandler.RegisterRoutes(httpRouter)
@@ -101,7 +102,6 @@ func main() {
 	}()
 
 	// setup gRPC server
-
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", grpcServicePort))
 	if err != nil {
 		log.Fatalf("Failed to listen to gRPC port: %v", err)
@@ -111,7 +111,6 @@ func main() {
 	protos.RegisterRentitServiceServer(grpcServer, rentitServiceServer)
 
 	log.Infof("Serving gRPC (DestroyIT) on port: %v", grpcServicePort)
-	// make sure to run this on a separate thread when adding WS
 
 	grpcServer.Serve(lis)
 	log.Infof("Stopped application")

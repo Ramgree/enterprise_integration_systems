@@ -7,7 +7,7 @@ Lists all the plants.
 
 Request format:
 ```
-URL/plants
+URL:8080/plants
 ```
 Example:
 ```
@@ -21,16 +21,16 @@ Example:
 ```
 [
     {
-        Plant_id: 5,
-        Plant_type_name: "dragon",
-        Plant_daily_rental_price: 5000,
-        Plant_name: "forklift"
+        id: 6,
+        plantType: "adamant",
+        dailyPrice: 1000,
+        plantName: "mewp"
     },
     {
-        Plant_id: 1,
-        Plant_type_name: "rune",
-        Plant_daily_rental_price: 1250,
-        Plant_name: "excavator"
+        id: 2,
+        plantType: "adamant",
+        dailyPrice: 5000,
+        plantName: "bulldozer"
     }
 ]
 ```
@@ -44,7 +44,7 @@ Date should be in year-month-day format.
 
 Request format:
 ```
-URL/estimate?name=<plant name>&from=<start date>&to=<end date>
+URL:8080/estimate?name=<plant name>&from=<start date>&to=<end date>
 ```
 
 Example:
@@ -70,7 +70,7 @@ Date should be in year-month-day format.
 
 Request format:
 ```
-URL/availability?name=<plant name>&from=<start date>&to=<end date>
+URL:8080/availability?name=<plant name>&from=<start date>&to=<end date>
 ```
 
 Example:

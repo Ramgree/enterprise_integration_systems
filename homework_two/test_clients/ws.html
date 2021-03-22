@@ -5,12 +5,19 @@
     </head>
     <body>
         <script type="text/javascript">
-            let socket = new WebSocket("ws://localhost:8081/plants");
+            let socket = new WebSocket("ws://localhost:8081/ws");
             console.log("Lets goooo");
 
             socket.onopen = () => {
-                console.log("Connessione open")
-                socket.send("Elo!")
+                console.log("Connection open")
+                socket.send(JSON.stringify({command: 'all'}))
+                socket.send(JSON.stringify({command: 'estimate', name:'bulldozer', startDate: '2020-10-11', endDate: '2020-10-13'}))
+                socket.send(JSON.stringify({command: 'availability', name:'bulldozer', startDate: '2020-10-11', endDate: '2020-10-13'}))
+
+                // These must fail
+                socket.send(JSON.stringify({command: 'availability', name:'bulldoze', startDate: '2020-10-11', endDate: '2020-10-13'}))
+                socket.send(JSON.stringify({command: 'availability', startDate: '2020-10-11', endDate: '2020-10-13'}))
+                socket.send(JSON.stringify({command: 'estimate', name:'dragonforce4', startDate: '2020-10-11', endDate: '2020-10-13'}))
             }
 
             socket.onmessage = (ev) =>{
@@ -18,12 +25,14 @@
             }
 
             socket.onclose = (event) => {
-                console.log("Connessione closed: ", event)
+                console.log("Connection closed: ", event)
             }
 
             socket.onerror = (error) => {
                 console.log("Error: ", error)
             }
+
+
         </script>
     </body>
 </html>
