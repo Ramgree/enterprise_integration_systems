@@ -149,43 +149,43 @@ Its difficult to say, that there is anything funny in databases.
 ### Core: WebSocket
 
 * Task completed by: Artem, Bohdan
-* Reviewer: 
+* Reviewer: Jekaterina
 
 * Was the stated problem solved in an acceptable manner?
 
--
+Yup, and it works just fine.
 
 * What has been done well and why?
 
--
+Code is clear and human readable, comments are also of help.
 
 
 * What is not well implemented and why?
 
--
+I think it's just fine since it's working as needed.
 
 
 * How easy is it to understand?
 
--
+Easy enough.
 
 * Recommendations to simplify
 
--
+None.
 
 
 * Did the implementers use anything special?
 
--
+Nope.
 
 
 * Anything else funny?
 
--
+No.
 
 ### Core: gRPC
 
-* Task completed by: Bruno
+* Task completed by: Bruno, Jekaterina
 * Reviewer: Bohdan
 
 * Was the stated problem solved in an acceptable manner?
@@ -261,76 +261,76 @@ How Rucy keeps praising GRPC. How there don't seem to be a lot of other comments
 ### Documentation: HTTP
 
 * Task completed by: Bohdan
-* Reviewer: 
+* Reviewer: Jekaterina
 
 * Was the stated problem solved in an acceptable manner?
 
--
+Yes.
 
 * What has been done well and why?
 
--
+Everything needed for setup explained in clear manner.
 
 
 * What is not well implemented and why?
 
--
+Can't say anything, everything is cool.
 
 
 * How easy is it to understand?
 
--
+For me it's just fine.
 
 * Recommendations to simplify
 
--
+None.
 
 
 * Did the implementers use anything special?
 
--
+No.
 
 
 * Anything else funny?
 
--
+Can't really say anything fun about documentation stuff.
 
 ### Documentation: WebSocket
 
 * Task completed by: Bohdan
-* Reviewer: 
+* Reviewer: Jekaterina
 
 * Was the stated problem solved in an acceptable manner?
 
--
+Yes, everything seems nice and clear.
 
 * What has been done well and why?
 
--
+Explanations with the examples. 
 
 
 * What is not well implemented and why?
 
--
+Hard to say since it seems that there's nothing else to write here.
 
 
 * How easy is it to understand?
 
--
+Super clear.
 
 * Recommendations to simplify
 
--
+None.
 
 
 * Did the implementers use anything special?
 
--
+No.
 
 
 * Anything else funny?
 
--
+Can't really say anything fun about documentation stuff x2.
 
 ### Documentation: gRPC
 
