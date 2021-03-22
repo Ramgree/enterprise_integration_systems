@@ -45,14 +45,14 @@ func TestGetAllHttp(t *testing.T) {
 }
 
 func TestEstimatePriceHttp(t *testing.T) {
-	verifyPrice(t, "http://localhost:%d/estimate?name=bulldozer&from=2020-01-01&to=2020-01-10", 45000)
-	verifyPrice(t, "http://localhost:%d/estimate?name=forklift&from=2020-01-01&to=2020-01-03", 10000)
+	verifyPriceHttp(t, "http://localhost:%d/estimate?name=bulldozer&from=2020-01-01&to=2020-01-10", 45000)
+	verifyPriceHttp(t, "http://localhost:%d/estimate?name=forklift&from=2020-01-01&to=2020-01-03", 10000)
 	verifyBadRequest(t, "http://localhost:%d/estimate?name=spongeBOB&from=2021-11-18&to=2021-11-20")
 	verifyBadRequest(t, "http://localhost:%d/estimate?name=bulldozer&from=2021-11-18")
 	verifyBadRequest(t, "http://localhost:%d/estimate?name=crane")
 }
 
-func verifyPrice(t *testing.T, url string, expected float32){
+func verifyPriceHttp(t *testing.T, url string, expected float32){
 	resp, err := http.Get(fmt.Sprintf(url, port))
 
 	if err != nil {
@@ -78,7 +78,7 @@ func verifyPrice(t *testing.T, url string, expected float32){
 
 	if _, ok := data["price"]; ok {
 		if !ok{
-			t.Error("\"price\" filed not present in response")
+			t.Error("\"price\" field not present in response")
 			return 
 		}
 	}
@@ -90,14 +90,14 @@ func verifyPrice(t *testing.T, url string, expected float32){
 }
 
 func TestAvailabilityHttp(t *testing.T) {
-	verifyAvailability(t, "http://localhost:%d/availability?name=bulldozer&from=2021-10-19&to=2021-10-21", true)
-	verifyAvailability(t, "http://localhost:%d/availability?name=crane&from=2021-11-18&to=2021-11-20", false)
+	verifyAvailabilityHttp(t, "http://localhost:%d/availability?name=bulldozer&from=2021-10-19&to=2021-10-21", true)
+	verifyAvailabilityHttp(t, "http://localhost:%d/availability?name=crane&from=2021-11-18&to=2021-11-20", false)
 	verifyBadRequest(t, "http://localhost:%d/availability?name=spongeBOB&from=2021-11-18&to=2021-11-20")
 	verifyBadRequest(t, "http://localhost:%d/availability?name=bulldozer&from=2021-11-18")
 	verifyBadRequest(t, "http://localhost:%d/availability?name=crane")
 }
 
-func verifyAvailability(t *testing.T, url string, expected bool){
+func verifyAvailabilityHttp(t *testing.T, url string, expected bool){
 	resp, err := http.Get(fmt.Sprintf(url, port))
 
 	if err != nil {
