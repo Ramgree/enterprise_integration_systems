@@ -68,6 +68,7 @@ func bufDialer(context.Context, string) (net.Conn, error) {
 }
 
 func TestGetAllGrpc(t *testing.T) {
+	expectedCount := 8
 
 	ctx := context.Background()
 	conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(bufDialer), grpc.WithInsecure())
@@ -80,8 +81,9 @@ func TestGetAllGrpc(t *testing.T) {
 	if err != nil {
 		t.Errorf("GetAll failed: %v", err)
 	}
-	if len(resp.Plants) != 8 {
-		t.Errorf("GetAll got the wrong number of plants: %v", resp)
+	if len(resp.Plants) != expectedCount {
+		t.Errorf("GetAll got the wrong number of plants, expected %d, got %d", expectedCount, len(resp.Plants))
+		t.Errorf("Results: %v", resp.Plants)
 	}
 
 }
@@ -150,9 +152,9 @@ func TestAvailabilityCheckGrpc(t *testing.T) {
 		t.Errorf("Availability not as expected %v", resp.Available)
 	}
 
-	name = "road roller"
-	start_date, _ = time.Parse(layout, "2021-10-19 00:00:00")
-	end_date, _ = time.Parse(layout, "2021-10-21 00:00:00")
+	name = "crane"
+	start_date, _ = time.Parse(layout, "2021-11-17 00:00:00")
+	end_date, _ = time.Parse(layout, "2021-11-21 00:00:00")
 	start_timestamp, _ = ptypes.TimestampProto(start_date)
 	end_timestamp, _ = ptypes.TimestampProto(end_date)
 

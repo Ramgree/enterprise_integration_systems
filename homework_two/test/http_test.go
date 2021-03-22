@@ -47,6 +47,9 @@ func TestGetAllHttp(t *testing.T) {
 func TestEstimatePriceHttp(t *testing.T) {
 	verifyPrice(t, "http://localhost:%d/estimate?name=bulldozer&from=2020-01-01&to=2020-01-10", 45000)
 	verifyPrice(t, "http://localhost:%d/estimate?name=forklift&from=2020-01-01&to=2020-01-03", 10000)
+	verifyBadRequest(t, "http://localhost:%d/estimate?name=spongeBOB&from=2021-11-18&to=2021-11-20")
+	verifyBadRequest(t, "http://localhost:%d/estimate?name=bulldozer&from=2021-11-18")
+	verifyBadRequest(t, "http://localhost:%d/estimate?name=crane")
 }
 
 func verifyPrice(t *testing.T, url string, expected float32){
@@ -89,6 +92,9 @@ func verifyPrice(t *testing.T, url string, expected float32){
 func TestAvailabilityHttp(t *testing.T) {
 	verifyAvailability(t, "http://localhost:%d/availability?name=bulldozer&from=2021-10-19&to=2021-10-21", true)
 	verifyAvailability(t, "http://localhost:%d/availability?name=crane&from=2021-11-18&to=2021-11-20", false)
+	verifyBadRequest(t, "http://localhost:%d/availability?name=spongeBOB&from=2021-11-18&to=2021-11-20")
+	verifyBadRequest(t, "http://localhost:%d/availability?name=bulldozer&from=2021-11-18")
+	verifyBadRequest(t, "http://localhost:%d/availability?name=crane")
 }
 
 func verifyAvailability(t *testing.T, url string, expected bool){
@@ -124,5 +130,13 @@ func verifyAvailability(t *testing.T, url string, expected bool){
 
 	if data["isAvailable"] != expected{
 		t.Error("Wrong availability value returned")
+	}
+}
+
+func verifyBadRequest(t *testing.T, url string){
+	resp, _ := http.Get(fmt.Sprintf(url, port))
+
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Error("Didn't get Bad Request with a broken request: " + url)
 	}
 }

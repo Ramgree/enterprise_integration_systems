@@ -78,7 +78,7 @@ func (h *PlantHandler) EstimateRental(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -117,7 +117,7 @@ func (h *PlantHandler) AvailabilityCheck(w http.ResponseWriter, r *http.Request)
 
 	if err != nil {
 		log.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 

@@ -28,6 +28,4 @@ python scripts/autograding.py
 ## Stuff to think about
 ------------------------
 
-* Plants are cached during testing, maybe do smth about it or idk?
-* Availability returns true when a plant doesn't exist (based on SQL query), not good
-
+* Plants are cached during testing, maybe do smth about it or no?

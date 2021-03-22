@@ -61,9 +61,9 @@ func TestGetAllService(t *testing.T) {
 	}
 
 	// checking cache
-	cached, cErr := redisConn.Exists(context.Background(), redisKey).Result()
+	cached, err := redisConn.Exists(context.Background(), redisKey).Result()
 
-	if cErr != nil {
+	if err != nil {
 		t.Error("Checking cache failed")
 	}
 
@@ -96,6 +96,7 @@ func TestEstimateRentalService(t *testing.T) {
 	plantRepository := repository.NewPlantRepository(clientMongo, dbConn, redisConn)
 	plantService := service.NewPlantService(plantRepository)
 
+	// from postgres
 	name := "excavator"
 	var start_date time.Time
 	start_date, _ = time.Parse(layout, "2020-01-01 00:00:00")
@@ -109,7 +110,19 @@ func TestEstimateRentalService(t *testing.T) {
 	}
 
 	if vals != 2500 {
-		t.Error("Wrong availability response", vals)
+		t.Error("Wrong estimate response", vals)
+	}
+
+	// from mongo db
+	name = "sweeper"
+	vals, err = plantService.EstimateRental(name, start_date, end_date)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if vals != 5000 {
+		t.Error("Wrong estimate response", vals)
 	}
 
 }
@@ -167,4 +180,15 @@ func TestAvailabilityCheckService(t *testing.T) {
 		t.Error("wrong availability response", vals)
 	}
 
+	// From mongo
+	name = "sweeper"
+	vals, err = plantService.AvailabilityCheck(name, start_date, end_date)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if vals != true {
+		t.Error("wrong availability response", vals)
+	}
 }

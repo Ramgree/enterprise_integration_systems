@@ -1,12 +1,8 @@
 CREATE TABLE plant (
     plant_id INT GENERATED ALWAYS AS IDENTITY,
     PRIMARY KEY(plant_id),
-    plant_type_id int,
     plant_daily_rental_price numeric,
-    CONSTRAINT fk_plant_type
-        FOREIGN KEY (plant_type_id)
-        REFERENCES plant_type(plant_type_id),
-    plant_name VARCHAR(100) NOT NULL
+    plant_name VARCHAR(100) NOT NULL,
     plant_type_name VARCHAR(100) NOT NULL
 );
 

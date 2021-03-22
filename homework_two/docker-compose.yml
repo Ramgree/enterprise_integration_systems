@@ -25,7 +25,7 @@ services:
         environment:
             MONGO_INITDB_DATABASE: Plants
         volumes:
-            - .scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+            - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
     # autograding is gonna run this
     rentit-test:
