@@ -34,8 +34,8 @@ func NewPlantHandler(pS plantService) *PlantHandler {
 
 func (h *PlantHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/plants", h.getAllPlants).Methods(http.MethodGet)
-	router.HandleFunc("/estimate", h.EstimateRental).Methods(http.MethodGet)
-	router.HandleFunc("/availability", h.AvailabilityCheck).Methods(http.MethodGet)
+	router.HandleFunc("/estimate", h.estimateRental).Methods(http.MethodGet)
+	router.HandleFunc("/availability", h.availabilityCheck).Methods(http.MethodGet)
 }
 
 func (h *PlantHandler) getAllPlants(w http.ResponseWriter, _ *http.Request) {
@@ -54,7 +54,7 @@ func (h *PlantHandler) getAllPlants(w http.ResponseWriter, _ *http.Request) {
 	}
 }
 
-func (h *PlantHandler) EstimateRental(w http.ResponseWriter, r *http.Request) {
+func (h *PlantHandler) estimateRental(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("name")
 	startDateStr := r.URL.Query().Get("from")
 	endDateStr := r.URL.Query().Get("to")
@@ -93,7 +93,7 @@ func (h *PlantHandler) EstimateRental(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *PlantHandler) AvailabilityCheck(w http.ResponseWriter, r *http.Request) {
+func (h *PlantHandler) availabilityCheck(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("name")
 	startDateStr := r.URL.Query().Get("from")
 	endDateStr := r.URL.Query().Get("to")

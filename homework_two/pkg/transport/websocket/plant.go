@@ -34,10 +34,10 @@ func NewRebuildItHandler(pS plantService, ws websocket.Upgrader) *RebuildItServi
 }
 
 func (h *RebuildItService) RegisterRoutes(router *mux.Router) {
-	router.HandleFunc("/ws", h.WsQuery)
+	router.HandleFunc("/ws", h.wsHandler)
 }
 
-func (h* RebuildItService) WsQuery (w http.ResponseWriter, r *http.Request){
+func (h* RebuildItService) wsHandler (w http.ResponseWriter, r *http.Request){
 	c, err := h.wsUpgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Print("ws upgrade:", err)
