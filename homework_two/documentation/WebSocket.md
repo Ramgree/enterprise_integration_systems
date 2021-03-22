@@ -27,7 +27,7 @@ Send the following JSON message:
 }
 ```
 
-Service sends back a message with "Plant" objects in JSON format or "Error field".
+Service sends back a message with "Plant" objects in JSON format or "error" field.
 
 Example: 
 
