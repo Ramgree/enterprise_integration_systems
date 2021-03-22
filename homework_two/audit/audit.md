@@ -371,7 +371,7 @@
 
 ### Deployment
 
-* Task completed by: 
+* Task completed by: Bohdan
 * Reviewer: 
 
 * Was the stated problem solved in an acceptable manner?

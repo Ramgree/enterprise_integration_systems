@@ -1,12 +1,19 @@
 
 # WebSocket docs (for dear ReBuildIT):
 
+## Deployed at
+
+```
+ws://135.181.157.155:8081
+```
+
+
 ## Setup: 
 
 Connect to:
 
 ```
-URL:8081/ws 
+URL/ws 
 ```
 
 ## Get all plants:

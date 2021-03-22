@@ -1,13 +1,20 @@
 
 # HTTP endpoints (for dear BuildIT):
 
+## Deployed at
+
+```
+http://135.181.157.155:8080
+```
+
+
 ## Get all plants (**HTTP GET**):
 
 Lists all the plants.
 
 Request format:
 ```
-URL:8080/plants
+URL/plants
 ```
 Example:
 ```
@@ -44,7 +51,7 @@ Date should be in year-month-day format.
 
 Request format:
 ```
-URL:8080/estimate?name=<plant name>&from=<start date>&to=<end date>
+URL/estimate?name=<plant name>&from=<start date>&to=<end date>
 ```
 
 Example:
@@ -70,7 +77,7 @@ Date should be in year-month-day format.
 
 Request format:
 ```
-URL:8080/availability?name=<plant name>&from=<start date>&to=<end date>
+URL/availability?name=<plant name>&from=<start date>&to=<end date>
 ```
 
 Example:
